@@ -16,6 +16,10 @@
   color: var(--color-blue);
 }
 
+.color-gray {
+  color: var(--color-gray);
+}
+
 .color-gray-hard {
   color: var(--color-gray-hard);
 }
