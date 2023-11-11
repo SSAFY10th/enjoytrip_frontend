@@ -1,0 +1,21 @@
+@import './base.css';
+
+.color-green {
+  color: var(--color-green);
+}
+
+.color-green-hard {
+  color: var(--color-green-hard);
+}
+
+.color-orange {
+  color: var(--color-orange);
+}
+
+.color-blue {
+  color: var(--color-blue);
+}
+
+.color-gray-hard {
+  color: var(--color-gray-hard);
+}

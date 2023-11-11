@@ -19,6 +19,15 @@
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+
+  --color-orange: #e78111;
+
+  --color-green: hsla(160, 100%, 37%, 1);
+  --color-green-hard: hsla(160, 100%, 37%, 0.2);
+
+  --color-blue: #0064ff;
+
+  --color-gray-hard: #202632;
 }
 
 /* semantic color variables for this project */
@@ -79,8 +88,12 @@ body {
     'Droid Sans',
     'Helvetica Neue',
     sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  background-color: var(--color-primary);
 }
