@@ -1,19 +1,11 @@
 <script setup>
 import Map from '../components/Map.vue'
-import Slide from '../components/Slide.vue'
 </script>
 
 <template>
-  <main id="container">
+  <main>
     <Map />
-    <div>
-      <Slide />
-    </div>
   </main>
 </template>
 
-<style scoped>
-#container {
-  position: relative;
-}
-</style>
+<style scoped></style>
