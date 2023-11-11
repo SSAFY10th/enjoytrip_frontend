@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { initializeMap } from '../map'
+import { initializeMap } from '../hooks/useKakaoMap'
 
 let map = null
 

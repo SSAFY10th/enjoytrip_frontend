@@ -1,10 +1,17 @@
 <script setup>
-import Map from '../components/Map.vue'
+import KakaoMap from '../components/KakaoMap.vue'
+import BottomSheet from '../components/BottomSheet.vue'
+import { useBottomSheet } from '../hooks/useBottomSheet'
+
+const { toggleBottomSheet, openBottomSheet } = useBottomSheet()
 </script>
 
 <template>
   <main>
-    <Map />
+    <KakaoMap />
+    <BottomSheet>
+      <h1>content</h1>
+    </BottomSheet>
   </main>
 </template>
 
