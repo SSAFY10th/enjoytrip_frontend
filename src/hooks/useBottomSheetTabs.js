@@ -18,11 +18,11 @@ const onChange = (key) => {
 }
 
 export const provider = [
-  'useSelectBottomSheet',
+  'useBottomSheetTabs',
   {
     selectedOption,
     onChange,
   },
 ]
 
-export const useSelectBottomSheet = () => inject('useSelectBottomSheet')
+export const useBottomSheetTabs = () => inject('useBottomSheetTabs')

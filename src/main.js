@@ -10,7 +10,7 @@ import * as directives from 'vuetify/directives'
 import App from './App.vue'
 import { router } from './views/router'
 import { provider as bottomSheetProvider } from './hooks/useBottomSheet'
-import { provider as selectBottomSheetProvider } from './hooks/useSelectBottomSheet'
+import { provider as bottomSheetTabsProvider } from './hooks/useBottomSheetTabs'
 import { provider as kakaoMapProvider } from './hooks/useKakaoMap'
 
 const vuetify = createVuetify({
@@ -25,7 +25,7 @@ app.use(router)
 app.use(vuetify)
 
 app.provide(...bottomSheetProvider)
-app.provide(...selectBottomSheetProvider)
+app.provide(...bottomSheetTabsProvider)
 app.provide(...kakaoMapProvider)
 
 app.mount('#app')
