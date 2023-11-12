@@ -35,3 +35,37 @@
 .font-xlg {
   font-size: var(--font-xlg);
 }
+
+.button {
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  padding: 8px 16px;
+  background-color: var(--color-primary);
+  border: none;
+  text-align: center;
+  border-radius: 4px;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+
+  &:hover {
+    background-color: var(--color-primary-hover);
+  }
+}
+
+.input {
+  display: block;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.input:focus {
+  border: 2px solid var(--color-primary-hover);
+}

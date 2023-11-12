@@ -16,8 +16,8 @@ const navigateRegisterView = () => {
   <header>
     <div id="container">
       <div id="auth">
-        <button @click="navigateLoginView">로그인</button>
-        <button @click="navigateRegisterView">회원가입</button>
+        <button class="button" @click="navigateLoginView">로그인</button>
+        <button class="button" @click="navigateRegisterView">회원가입</button>
       </div>
     </div>
   </header>

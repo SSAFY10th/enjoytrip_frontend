@@ -1,13 +1,19 @@
 <script setup>
-import SwitchRadio from '../_lib/components/SwitchRadio.vue'
-
+// design-system
+import Switch from '../_lib/components/Switch.vue'
+import Select from '../_lib/components/Select.vue'
+// components
 import Header from '../components/Header.vue'
 import KakaoMap from '../components/KakaoMap.vue'
 import BottomSheet from '../components/BottomSheet.vue'
-
+// hooks
 import { useSelectBottomSheet, options } from '../hooks/useSelectBottomSheet'
+import { useKakaoMap } from '../hooks/useKakaoMap'
 
 const { selectedOption, onChange } = useSelectBottomSheet()
+const { sidos, selectSido } = useKakaoMap()
+
+const label = '시/도'
 </script>
 
 <template>
@@ -17,8 +23,8 @@ const { selectedOption, onChange } = useSelectBottomSheet()
     <BottomSheet>
       <section id="bottomSheetContent">
         <form id="bottomSheetContent__searchForm">
-          <input type="search" placeholder="여행지를 찾아보세요!" />
-          <button id="bottomSheetContent__searchButton">
+          <input class="input" type="search" placeholder="여행지를 찾아보세요!" />
+          <button class="button" id="bottomSheetContent__searchButton">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="1em"
@@ -34,11 +40,76 @@ const { selectedOption, onChange } = useSelectBottomSheet()
         </form>
         <div id="bottomSheetContent__selectContainer">
           <div id="bottomSheetContent__selectContainer__header">
-            <SwitchRadio :options="options" :selectedOption="selectedOption" :onChange="onChange" />
+            <Switch :options="options" :selectedOption="selectedOption" :onChange="onChange" />
           </div>
-          <div>
-            <div v-if="selectedOption === 'option1'">select</div>
-            <div v-else>로그인해라</div>
+          <div id="bottomSheetContent__selectContainer__contents">
+            <template v-if="selectedOption === 'option1'">
+              <Select :label="label" />
+              <!-- <div id="asideMain">
+                <h2>관광지 탐색</h2>
+                <div class="AreaSelect">
+                  <div class="Select">
+                    <select id="sido">
+                      <option value="">시도선택</option>
+                    </select>
+                  </div>
+                  <div class="Select">
+                    <select id="gugun">
+                      <option value="">구군선택</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="SearchFilter">
+                  <div class="SearchFilterRow">
+                    <button value="12" class="filterIcon">
+                      <div class="FilterIcon">
+                        <i class="fas fa-suitcase" style="color: #fe8c52"></i>
+                      </div>
+                      <span>관광지</span>
+                    </button>
+                    <button value="32" class="filterIcon">
+                      <div class="FilterIcon">
+                        <i class="fas fa-hotel" style="color: #fe8c52"></i>
+                      </div>
+                      <span> 숙박 </span>
+                    </button>
+                    <button value="39" class="filterIcon">
+                      <div class="FilterIcon">
+                        <i class="fas fa-utensils" style="color: #d971db"></i>
+                      </div>
+                      <span> 음식점 </span>
+                    </button>
+                    <button value="14" class="filterIcon">
+                      <div class="FilterIcon">
+                        <i class="fas fa-ticket-alt" style="color: #5e9bf3"></i>
+                      </div>
+                      <span> 문화시설 </span>
+                    </button>
+                  </div>
+                  <div class="SearchFilterRow">
+                    <button value="15" class="filterIcon">
+                      <div class="FilterIcon">
+                        <i class="fas fa-ticket-alt" style="color: #03c75a"></i>
+                      </div>
+                      <span> 공연 </span>
+                    </button>
+                    <button value="25" class="filterIcon">
+                      <div class="FilterIcon">
+                        <i class="fas fa-map-signs" style="color: #ffb21f"></i>
+                      </div>
+                      <span>여행코스</span>
+                    </button>
+                    <button value="38" class="filterIcon">
+                      <div class="FilterIcon">
+                        <i class="fas fa-shopping-bag" style="color: #ffb21f"></i>
+                      </div>
+                      <span>쇼핑</span>
+                    </button>
+                  </div>
+                </div>
+              </div> -->
+            </template>
+            <template v-else>로그인해라</template>
           </div>
         </div>
       </section>
@@ -84,5 +155,9 @@ const { selectedOption, onChange } = useSelectBottomSheet()
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#bottomSheetContent__selectContainer__contents {
+  width: 100%;
 }
 </style>

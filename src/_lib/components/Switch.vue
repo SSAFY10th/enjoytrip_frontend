@@ -12,7 +12,7 @@ defineProps(['selectedOption', 'options', 'onChange'])
   <div class="toggle-container" v-for="option in options" :key="option.key">
     <input
       type="radio"
-      class="toggle-input"
+      class="toggle-input input"
       name="SwitchRadio"
       :id="option.key"
       :checked="selectedOption === option.key"
