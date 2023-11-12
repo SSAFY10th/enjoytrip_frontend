@@ -23,3 +23,15 @@
 .color-gray-hard {
   color: var(--color-gray-hard);
 }
+
+.font-sm {
+  font-size: var(--font-sm);
+}
+
+.font-lg {
+  font-size: var(--font-lg);
+}
+
+.font-xlg {
+  font-size: var(--font-xlg);
+}

@@ -21,14 +21,19 @@
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
 
   --color-orange: #e78111;
+  --color-orange-hard: #ca7010;
 
+  --color-green-soft: hsla(160, 100%, 37%, 0.2);
   --color-green: hsla(160, 100%, 37%, 1);
-  --color-green-hard: hsla(160, 100%, 37%, 0.2);
 
   --color-blue: #0064ff;
 
   --color-gray: rgb(195, 194, 194);
   --color-gray-hard: #202632;
+
+  --font-sm: 14px;
+  --font-lg: 18px;
+  --font-xlg: 20px;
 }
 
 /* semantic color variables for this project */
@@ -96,5 +101,19 @@ body {
 }
 
 button {
-  background-color: var(--color-primary);
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  padding: 8px 16px;
+  background-color: var(--color-orange);
+  border: none;
+  text-align: center;
+  border-radius: 4px;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+
+  &:hover {
+    background-color: #ca7010;
+  }
 }
