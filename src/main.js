@@ -9,6 +9,7 @@ import * as directives from 'vuetify/directives'
 import App from './App.vue'
 import { router } from './views/router'
 import { provider as bottomSheetProvider } from './hooks/useBottomSheet'
+import { provider as selectBottomSheetProvider } from './hooks/useSelectBottomSheet'
 
 const vuetify = createVuetify({
   components,
@@ -22,5 +23,6 @@ app.use(router)
 app.use(vuetify)
 
 app.provide(...bottomSheetProvider)
+app.provide(...selectBottomSheetProvider)
 
 app.mount('#app')

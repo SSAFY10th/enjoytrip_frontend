@@ -20,6 +20,9 @@
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
 
+  --color-primary: #50ba54;
+  --color-primary-hover: rgb(17, 124, 60);
+
   --color-orange: #e78111;
   --color-orange-hard: #ca7010;
 
@@ -105,7 +108,7 @@ button {
   width: 100%;
   cursor: pointer;
   padding: 8px 16px;
-  background-color: var(--color-orange);
+  background-color: var(--color-primary);
   border: none;
   text-align: center;
   border-radius: 4px;
@@ -114,6 +117,22 @@ button {
   font-size: 16px;
 
   &:hover {
-    background-color: #ca7010;
+    background-color: var(--color-primary-hover);
   }
+}
+
+input {
+  display: block;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+input:focus {
+  border: 2px solid var(--color-primary-hover);
 }

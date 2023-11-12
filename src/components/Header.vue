@@ -14,7 +14,7 @@ const navigateRegisterView = () => {
 
 <template>
   <header>
-    <div id="header__inner">
+    <div id="container">
       <div id="auth">
         <button @click="navigateLoginView">로그인</button>
         <button @click="navigateRegisterView">회원가입</button>
@@ -34,7 +34,7 @@ header {
   background-color: rgba(187, 185, 185, 0.4);
 }
 
-#header__inner {
+#container {
   display: flex;
   justify-content: flex-end;
   align-items: center;
