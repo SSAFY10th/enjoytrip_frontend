@@ -1,6 +1,8 @@
 <script setup>
 // design-system
 import Tabs from '../_lib/components/Tabs.vue'
+// components
+import LocationSelect from './LocationSelect.vue'
 // hooks
 import { useBottomSheetTabs, options } from '../hooks/useBottomSheetTabs'
 
@@ -14,9 +16,7 @@ const { selectedOption, onChange } = useBottomSheetTabs()
     </div>
     <div id="panel">
       <template v-if="selectedOption === 'option1'">
-        <div id="grid">
-          <div><!-- <Select /> --></div>
-        </div>
+        <LocationSelect />
       </template>
       <template v-else>로그인해라</template>
     </div>
@@ -43,11 +43,5 @@ const { selectedOption, onChange } = useBottomSheetTabs()
 
 #panel {
   width: 100%;
-}
-
-#grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
 }
 </style>

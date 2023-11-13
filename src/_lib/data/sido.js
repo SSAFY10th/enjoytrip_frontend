@@ -1,4 +1,4 @@
-export const sidos = [
+export const sidoList = [
   {
     rnum: 1,
     code: '1',
