@@ -1,9 +1,24 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+
+const inputText = ref('')
+
+const onSubmit = () => {
+  if (!inputText) {
+    return
+  }
+
+  window.alert('개발 중인 기능이에요.')
+
+  console.log(inputText.value)
+  inputText.value = ''
+}
+</script>
 
 <template>
-  <form id="container">
-    <input class="input" type="search" placeholder="여행지를 찾아보세요!" />
-    <button class="button">
+  <form @submit.prevent="onSubmit" id="container">
+    <input class="input" type="search" v-model="inputText" placeholder="여행지를 찾아보세요!" />
+    <button type="submit" class="button">
       <svg xmlns="http://www.w3.org/2000/svg" height="1em" stroke="#19CE60" viewBox="0 0 512 512">
         <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
         <path

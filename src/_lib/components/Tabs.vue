@@ -1,11 +1,12 @@
 <script setup>
-/*
-type Option = {
-  key: string,
-  value: string
-}
-*/
-defineProps(['selectedOption', 'options', 'onChange'])
+defineProps({
+  selectedOption: String,
+  options: {
+    key: String,
+    value: String,
+  },
+  onChange: Function,
+})
 </script>
 
 <template>

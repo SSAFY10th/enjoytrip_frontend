@@ -1,16 +1,10 @@
 <script setup>
 // design-system
 import Tabs from '../_lib/components/Tabs.vue'
-import Select from '../_lib/components/Select.vue'
 // hooks
 import { useBottomSheetTabs, options } from '../hooks/useBottomSheetTabs'
-import { useKakaoMap } from '../hooks/useKakaoMap'
 
 const { selectedOption, onChange } = useBottomSheetTabs()
-const { sidos, selectSido } = useKakaoMap()
-
-const sidoLabel = '시/도'
-const gugunLabel = '구/군'
 </script>
 
 <template>
@@ -20,9 +14,8 @@ const gugunLabel = '구/군'
     </div>
     <div id="panel">
       <template v-if="selectedOption === 'option1'">
-        <div style="display: flex; gap: 10px">
-          <Select :label="sidoLabel" />
-          <Select :label="gugunLabel" />
+        <div id="grid">
+          <div><!-- <Select /> --></div>
         </div>
       </template>
       <template v-else>로그인해라</template>
@@ -50,5 +43,11 @@ const gugunLabel = '구/군'
 
 #panel {
   width: 100%;
+}
+
+#grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 </style>
