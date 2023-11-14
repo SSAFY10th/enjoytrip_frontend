@@ -10,6 +10,16 @@ export const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/auth/register',
+      name: 'register',
+      component: () => import('./RegisterView.vue'),
+    },
+    {
+      path: '/auth/login',
+      name: 'login',
+      component: () => import('./LoginView.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: '404',
       component: () => import('./404.vue'),

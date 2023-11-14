@@ -4,7 +4,7 @@ import { ref } from 'vue'
 const inputText = ref('')
 
 const onSubmit = () => {
-  if (!inputText) {
+  if (!inputText.value) {
     return
   }
 

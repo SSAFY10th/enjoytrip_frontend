@@ -1,6 +1,6 @@
 import { ref, inject } from 'vue'
 
-const isShowBottomSheet = ref(true)
+const isShowBottomSheet = ref(false)
 
 const openBottomSheet = (e) => {
   e.stopPropagation()

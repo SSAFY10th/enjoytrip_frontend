@@ -3,11 +3,11 @@ import { router } from '../views/router'
 
 // TODO: auth guard 처리
 
-const navigateLoginView = () => {
+const navigateToLoginView = () => {
   router.push('/auth/login')
 }
 
-const navigateRegisterView = () => {
+const navigateToRegisterView = () => {
   router.push('/auth/register')
 }
 </script>
@@ -16,8 +16,8 @@ const navigateRegisterView = () => {
   <header>
     <div id="container">
       <div id="auth">
-        <button class="button" @click="navigateLoginView">로그인</button>
-        <button class="button" @click="navigateRegisterView">회원가입</button>
+        <button class="button" @click="navigateToLoginView">로그인</button>
+        <button class="button" @click="navigateToRegisterView">회원가입</button>
       </div>
     </div>
   </header>

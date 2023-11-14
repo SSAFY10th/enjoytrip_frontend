@@ -10,7 +10,6 @@ import * as directives from 'vuetify/directives'
 import App from './App.vue'
 import { router } from './views/router'
 import { provider as bottomSheetProvider } from './hooks/useBottomSheet'
-import { provider as bottomSheetTabsProvider } from './hooks/useBottomSheetTabs'
 
 const vuetify = createVuetify({
   components,
@@ -24,6 +23,5 @@ app.use(router)
 app.use(vuetify)
 
 app.provide(...bottomSheetProvider)
-app.provide(...bottomSheetTabsProvider)
 
 app.mount('#app')
