@@ -13,19 +13,16 @@ const SizeMatcher = {
 }
 
 const GoogleIconMatcher = {
-  arrowBack: 'arrow_back',
+  arrowBack: 'arrow_back_ios',
   home: 'home',
 }
 </script>
 
 <template>
   <div id="container">
-    <span
-      id="icon"
-      :style="{ fontWeight: 800, fontSize: `${SizeMatcher[size]}px` }"
-      class="material-icons"
-      >{{ GoogleIconMatcher[name] }}</span
-    >
+    <span id="icon" :style="{ fontSize: `${SizeMatcher[size]}px` }" class="material-icons">{{
+      GoogleIconMatcher[name]
+    }}</span>
   </div>
 </template>
 
@@ -36,11 +33,10 @@ const GoogleIconMatcher = {
   align-items: center;
   padding: 4px;
   border-radius: 4px;
-  color: var(--color-green);
   cursor: pointer;
 }
 
-#container:hover {
-  background-color: var(--color-green-soft);
+#icon:hover {
+  font-weight: 800;
 }
 </style>

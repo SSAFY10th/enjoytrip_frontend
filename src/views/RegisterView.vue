@@ -1,7 +1,71 @@
 <script setup>
+import { ref, computed } from 'vue'
+import * as RegisterValidation from '../_lib/constants/registerValidation'
 import Icon from '../_lib/components/Icon.vue'
 import Layout from './Layout.vue'
 import { router } from './router'
+
+const onBlurBuilder = (ref) => () => {
+  ref.value = true
+}
+
+const userIdInputValue = ref('')
+const emailInputValue = ref('')
+const passwordInputValue = ref('')
+const passwordConfirmInputValue = ref('')
+
+const isTouchedUserId = ref(false)
+const onBlurUserId = onBlurBuilder(isTouchedUserId)
+
+const isTouchedEmail = ref(false)
+const onBlurEmail = onBlurBuilder(isTouchedEmail)
+
+const isTouchedPassword = ref(false)
+const onBlurPassword = onBlurBuilder(isTouchedPassword)
+
+const isTouchedPasswordConfirm = ref(false)
+const onBlurPasswordConfirm = onBlurBuilder(isTouchedPasswordConfirm)
+
+const isUserIdError = computed(() => {
+  return isTouchedUserId.value && !RegisterValidation.validateUserId(userIdInputValue.value)
+})
+
+const isEmailError = computed(() => {
+  return isTouchedEmail.value && !RegisterValidation.validateEmail(emailInputValue.value)
+})
+
+const isPasswordError = computed(() => {
+  return isTouchedPassword.value && !RegisterValidation.validatePassword(passwordInputValue.value)
+})
+
+const isPasswordConfirmError = computed(() => {
+  return (
+    isTouchedPasswordConfirm.value && passwordConfirmInputValue.value !== passwordInputValue.value
+  )
+})
+
+const isValidateForm = computed(() => {
+  return (
+    isTouchedUserId.value &&
+    isTouchedEmail.value &&
+    isTouchedPassword.value &&
+    isTouchedPasswordConfirm.value &&
+    !isUserIdError.value &&
+    !isEmailError.value &&
+    !isPasswordError.value &&
+    !isPasswordConfirmError.value
+  )
+})
+
+const onSubmit = () => {
+  if (!isValidateForm.value) {
+    window.alert('회원가입 정책을 지켜주세요.')
+    return
+  }
+  window.alert(
+    `email : ${emailInputValue.value} \n password : ${passwordInputValue.value} \n passwordConfirm : ${passwordConfirmInputValue.value}`,
+  )
+}
 
 const navigateToBack = () => {
   router.back()
@@ -11,71 +75,101 @@ const navigateToBack = () => {
 <template>
   <Layout>
     <header id="formHeader">
-      <Icon name="arrowBack" size="xlg" @click="navigateToBack" />
-      <h1>회원가입</h1>
+      <div>
+        <Icon class="color-green-hard" name="arrowBack" size="xlg" @click="navigateToBack" />
+      </div>
+      <h1>EnjoyTrip 회원가입</h1>
     </header>
     <form @submit.prevent="onSubmit">
       <div class="input-group">
-        <label for="username">사용자 이름</label>
+        <label for="userId">ID</label>
         <input
+          class="input"
           type="text"
-          id="username"
-          name="username"
+          id="userId"
+          name="userId"
           required
-          v-model="usernameInputValue"
-          @blur="onBlurUsername"
+          v-model="userIdInputValue"
+          @blur="onBlurUserId"
+          placeholder="로그인에 사용될 아이디를 입력해주세요"
         />
-        <div v-show="isUsernameError" class="error">사용자 이름의 길이는 5이상이어야 해요.</div>
+        <div v-show="isUserIdError" class="error">
+          {{ RegisterValidation.invalidUserIdMessage }}
+        </div>
       </div>
 
       <div class="input-group">
         <label for="email">이메일</label>
         <input
+          class="input"
           type="email"
           id="email"
           name="email"
           required
           v-model="emailInputValue"
           @blur="onBlurEmail"
+          placeholder="이메일을 입력해주세요"
         />
-        <div v-show="isEmailError" class="error">이메일 형식을 지켜주세요.</div>
+        <div v-show="isEmailError" class="error">{{ RegisterValidation.invalidEmailMessage }}</div>
       </div>
 
       <div class="input-group">
         <label for="password">비밀번호</label>
         <input
+          class="input"
           type="password"
           id="password"
           name="password"
           required
           v-model="passwordInputValue"
           @blur="onBlurPassword"
+          placeholder="비밀번호를 입력해주세요"
         />
-        <div v-show="isPasswordError" class="error">비밀번호의 길이는 8이상이어야 해요.</div>
+        <div v-show="isPasswordError" class="error">
+          {{ RegisterValidation.invalidPasswordMessage }}
+        </div>
       </div>
 
       <div class="input-group">
         <label for="password">비밀번호 확인</label>
         <input
+          class="input"
           type="password"
           id="passwordConfirm"
           name="passwordConfirm"
           required
           v-model="passwordConfirmInputValue"
           @blur="onBlurPasswordConfirm"
+          placeholder="비밀번호를 한번 더 입력해주세요"
         />
-        <div v-show="isPasswordConfirmError" class="error">비밀번호를 한번 더 입력해주세요.</div>
+        <div v-show="isPasswordConfirmError" class="error">비밀번호를 한번 더 입력해주세요</div>
       </div>
-      <button type="submit" class="btn">가입하기</button>
+      <button
+        type="submit"
+        class="button"
+        style="color: white; margin-top: 50px"
+        :disabled="!isValidateForm"
+      >
+        가입하기
+      </button>
     </form>
   </Layout>
 </template>
 
 <style scoped>
 #formHeader {
+  margin-bottom: 20px;
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  flex-direction: column;
+}
+
+#formHeader > div {
+  align-self: flex-start;
+}
+
+h1 {
+  text-align: center;
+  font-weight: 800;
 }
 
 #icon {
@@ -91,36 +185,14 @@ const navigateToBack = () => {
 .input-group label {
   display: block;
   margin-bottom: 5px;
-}
-
-.input-group input {
-  flex: 1;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-}
-.input-group input:focus {
-  outline: none;
-  border-color: #007bff;
-}
-.btn {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
-.btn:hover {
-  background-color: #0056b3;
+  font-weight: 800;
+  font-size: 20px;
 }
 
 .error {
-  margin-top: -10px;
+  margin-top: 5px;
   color: tomato;
+  font-weight: 800;
   font-size: 16px;
 }
 </style>
