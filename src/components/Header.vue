@@ -9,24 +9,23 @@ const navigateToLoginView = () => {
 </script>
 
 <template>
-  <header>
-    <div>
-      <button class="button" @click="navigateToLoginView">로그인</button>
-    </div>
-  </header>
+  <div id="header">
+    <button id="loginButton" class="button" @click="navigateToLoginView">로그인</button>
+  </div>
 </template>
 
 <style scoped>
-header {
-  z-index: 99;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 10px;
-  background-color: rgba(187, 185, 185, 0.4);
+#header {
+  position: relative;
+}
 
-  display: flex;
-  justify-content: flex-end;
+#loginButton {
+  display: inline-block;
+  width: inherit;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  z-index: 99;
+  border: 3px solid #fafafa;
 }
 </style>

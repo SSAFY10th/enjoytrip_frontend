@@ -3,13 +3,16 @@ import { onMounted, ref } from 'vue'
 
 import { initializeMap } from '../hooks/useKakaoMap'
 
+let mapContainer = null
 let map = null
 
-const latitude = ref(33.450701)
-const longitude = ref(126.570667)
+const coordinate = ref({
+  latitude: 33.450701,
+  longitude: 126.570667,
+})
 
 onMounted(() => {
-  map = initializeMap(latitude.value, longitude.value)
+  mapContainer = initializeMap(coordinate.value.latitude, coordinate.value.longitude)
 })
 </script>
 
