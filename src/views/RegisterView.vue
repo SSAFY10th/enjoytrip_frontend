@@ -65,7 +65,7 @@ const isValidateForm = computed(() => {
   )
 })
 
-const onSubmit = () => {
+const handleSubmit = () => {
   if (!isValidateForm.value) {
     window.alert('회원가입 정책을 지켜주세요.')
     return
@@ -96,7 +96,7 @@ const navigateToBack = () => {
       </div>
       <h1>EnjoyTrip 회원가입</h1>
     </header>
-    <form @submit.prevent="onSubmit">
+    <form @submit.prevent="handleSubmit">
       <div class="input-group">
         <label for="userId">ID</label>
         <div style="display: flex">
