@@ -79,6 +79,9 @@ const navigateToBack = () => {
         로그인
       </button>
     </form>
+    <div id="links">
+      <RouterLink to="/auth/register">회원가입</RouterLink>
+    </div>
   </Layout>
 </template>
 
@@ -121,5 +124,14 @@ h1 {
   font-weight: 800;
   font-size: 12px;
 }
+
+#links {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+#links a {
+  font-weight: 800;
+}
 </style>
-../_lib/constants/registerPolicy
