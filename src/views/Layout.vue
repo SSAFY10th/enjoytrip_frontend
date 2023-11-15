@@ -10,6 +10,6 @@
   display: flex;
   flex-direction: column;
   padding: 10px;
-  margin: 30px auto 0;
+  margin: 0 auto;
 }
 </style>

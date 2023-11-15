@@ -5,55 +5,63 @@ import Icon from '../_lib/components/Icon.vue'
 import Layout from './Layout.vue'
 import { router } from './router'
 
-const onBlurBuilder = (ref) => () => {
-  ref.value = true
+const isCheckedUserId = ref(false)
+
+const values = ref({
+  userId: '',
+  email: '',
+  password: '',
+  passwordConfirm: '',
+})
+
+const isTouched = ref({
+  userId: false,
+  email: false,
+  password: false,
+  passwordConfirm: false,
+})
+
+const isError = {
+  userId: computed(() => {
+    return isTouched.value.userId && !RegisterValidation.validateUserId(values.value.userId)
+  }),
+  email: computed(() => {
+    return isTouched.value.email && !RegisterValidation.validateEmail(values.value.email)
+  }),
+  password: computed(() => {
+    return isTouched.value.password && !RegisterValidation.validatePassword(values.value.password)
+  }),
+  passwordConfirm: computed(() => {
+    return isTouched.value.passwordConfirm && values.value.passwordConfirm !== values.value.password
+  }),
 }
 
-const userIdInputValue = ref('')
-const emailInputValue = ref('')
-const passwordInputValue = ref('')
-const passwordConfirmInputValue = ref('')
-
-const isTouchedUserId = ref(false)
-const onBlurUserId = onBlurBuilder(isTouchedUserId)
-
-const isTouchedEmail = ref(false)
-const onBlurEmail = onBlurBuilder(isTouchedEmail)
-
-const isTouchedPassword = ref(false)
-const onBlurPassword = onBlurBuilder(isTouchedPassword)
-
-const isTouchedPasswordConfirm = ref(false)
-const onBlurPasswordConfirm = onBlurBuilder(isTouchedPasswordConfirm)
-
-const isUserIdError = computed(() => {
-  return isTouchedUserId.value && !RegisterValidation.validateUserId(userIdInputValue.value)
-})
-
-const isEmailError = computed(() => {
-  return isTouchedEmail.value && !RegisterValidation.validateEmail(emailInputValue.value)
-})
-
-const isPasswordError = computed(() => {
-  return isTouchedPassword.value && !RegisterValidation.validatePassword(passwordInputValue.value)
-})
-
-const isPasswordConfirmError = computed(() => {
-  return (
-    isTouchedPasswordConfirm.value && passwordConfirmInputValue.value !== passwordInputValue.value
-  )
-})
+const handleChangeUserId = (e) => {
+  values.value.userId = e.target.value
+  isCheckedUserId.value = false
+  isTouched.value.userId = true
+}
+const handleChangeEmail = (e) => {
+  values.value.email = e.target.value
+  isTouched.value.email = true
+}
+const handleChangePassword = (e) => {
+  values.value.password = e.target.value
+  isTouched.value.password = true
+}
+const handleChangePasswordConfirm = (e) => {
+  values.value.passwordConfirm = e.target.value
+  isTouched.value.passwordConfirm = true
+}
 
 const isValidateForm = computed(() => {
+  if (!isCheckedUserId.value) {
+    return false
+  }
+
   return (
-    isTouchedUserId.value &&
-    isTouchedEmail.value &&
-    isTouchedPassword.value &&
-    isTouchedPasswordConfirm.value &&
-    !isUserIdError.value &&
-    !isEmailError.value &&
-    !isPasswordError.value &&
-    !isPasswordConfirmError.value
+    Object.values(isTouched.value).every((value) => !!value) &&
+    Object.values(isError).every((ref) => !ref.value)
   )
 })
 
@@ -62,9 +70,17 @@ const onSubmit = () => {
     window.alert('회원가입 정책을 지켜주세요.')
     return
   }
-  window.alert(
-    `email : ${emailInputValue.value} \n password : ${passwordInputValue.value} \n passwordConfirm : ${passwordConfirmInputValue.value}`,
-  )
+
+  console.log(values.value)
+}
+
+const handleCheckUserId = () => {
+  if (!values.value.userId) {
+    return
+  }
+
+  // TODO: API call
+  isCheckedUserId.value = true
 }
 
 const navigateToBack = () => {
@@ -83,18 +99,32 @@ const navigateToBack = () => {
     <form @submit.prevent="onSubmit">
       <div class="input-group">
         <label for="userId">ID</label>
-        <input
-          class="input"
-          type="text"
-          id="userId"
-          name="userId"
-          required
-          v-model="userIdInputValue"
-          @blur="onBlurUserId"
-          placeholder="로그인에 사용될 아이디를 입력해주세요"
-        />
-        <div v-show="isUserIdError" class="error">
+        <div style="display: flex">
+          <input
+            style="flex: 5"
+            class="input"
+            type="text"
+            id="userId"
+            name="userId"
+            required
+            :value="values.userId"
+            @change="handleChangeUserId"
+            placeholder="로그인에 사용될 아이디를 입력해주세요"
+          />
+          <button
+            style="flex: 1; font-size: 14px"
+            class="button"
+            @click="handleCheckUserId"
+            :disabled="!isTouched.userId || isError.userId.value"
+          >
+            중복 확인
+          </button>
+        </div>
+        <div v-if="isError.userId.value" class="error">
           {{ RegisterValidation.invalidUserIdMessage }}
+        </div>
+        <div v-else-if="isTouched.userId && isCheckedUserId" style="color: green; font-weight: 800">
+          사용 가능한 아이디입니다
         </div>
       </div>
 
@@ -106,11 +136,13 @@ const navigateToBack = () => {
           id="email"
           name="email"
           required
-          v-model="emailInputValue"
-          @blur="onBlurEmail"
+          v-model="values.email"
+          @change="handleChangeEmail"
           placeholder="이메일을 입력해주세요"
         />
-        <div v-show="isEmailError" class="error">{{ RegisterValidation.invalidEmailMessage }}</div>
+        <div v-show="isError.email.value" class="error">
+          {{ RegisterValidation.invalidEmailMessage }}
+        </div>
       </div>
 
       <div class="input-group">
@@ -121,11 +153,11 @@ const navigateToBack = () => {
           id="password"
           name="password"
           required
-          v-model="passwordInputValue"
-          @blur="onBlurPassword"
+          v-model="values.password"
+          @change="handleChangePassword"
           placeholder="비밀번호를 입력해주세요"
         />
-        <div v-show="isPasswordError" class="error">
+        <div v-show="isError.password.value" class="error">
           {{ RegisterValidation.invalidPasswordMessage }}
         </div>
       </div>
@@ -138,11 +170,13 @@ const navigateToBack = () => {
           id="passwordConfirm"
           name="passwordConfirm"
           required
-          v-model="passwordConfirmInputValue"
-          @blur="onBlurPasswordConfirm"
+          v-model="values.passwordConfirm"
+          @change="handleChangePasswordConfirm"
           placeholder="비밀번호를 한번 더 입력해주세요"
         />
-        <div v-show="isPasswordConfirmError" class="error">비밀번호를 한번 더 입력해주세요</div>
+        <div v-show="isError.passwordConfirm.value" class="error">
+          비밀번호를 한번 더 입력해주세요
+        </div>
       </div>
       <button
         type="submit"
@@ -193,6 +227,6 @@ h1 {
   margin-top: 5px;
   color: tomato;
   font-weight: 800;
-  font-size: 16px;
+  font-size: 12px;
 }
 </style>
