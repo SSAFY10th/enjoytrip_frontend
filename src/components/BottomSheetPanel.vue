@@ -25,12 +25,18 @@ const navigateToRegisterView = () => {
         <LocationSelect />
       </template>
       <template v-else>
-        <div id="loginGuide">
+        <!-- <div id="loginGuidePanel">
           <div class="font-xlg" style="font-weight: 600">로그인이 필요한 서비스에요</div>
           <div id="loginGuideButtons">
             <button class="button" @click="navigateToRegisterView">회원가입</button>
             <button class="button" @click="navigateToLoginView">로그인</button>
           </div>
+        </div> -->
+        <div id="userPlanPanel">
+          <RouterLink to="/plan/create" id="planCreateButton">
+            + 새로운 여행계획 만들기
+          </RouterLink>
+          <ul id="userPlanList"></ul>
         </div>
       </template>
     </div>
@@ -59,7 +65,7 @@ const navigateToRegisterView = () => {
   width: 100%;
 }
 
-#loginGuide {
+#loginGuidePanel {
   display: flex;
   height: 200px;
   flex-direction: column;
@@ -72,5 +78,18 @@ const navigateToRegisterView = () => {
   display: flex;
   width: 200px;
   gap: 10px;
+}
+
+#userPlanPanel {
+  display: flex;
+  flex-direction: column;
+}
+
+#planCreateButton {
+  margin-top: 20px;
+  align-self: flex-end;
+  display: inline-block;
+  padding: 4px 8px;
+  font-weight: 800;
 }
 </style>

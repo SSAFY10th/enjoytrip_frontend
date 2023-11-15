@@ -20,6 +20,11 @@ export const router = createRouter({
       component: () => import('./LoginView.vue'),
     },
     {
+      path: '/plan/create',
+      name: 'createPlan',
+      component: () => import('./CreatePlanView.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: '404',
       component: () => import('./404.vue'),

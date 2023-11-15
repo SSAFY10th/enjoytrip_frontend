@@ -10,7 +10,7 @@ const navigateToLoginView = () => {
 
 <template>
   <header>
-    <div id="container">
+    <div>
       <button class="button" @click="navigateToLoginView">로그인</button>
     </div>
   </header>

@@ -15,6 +15,7 @@ const SizeMatcher = {
 const GoogleIconMatcher = {
   arrowBack: 'arrow_back_ios',
   home: 'home',
+  add: 'add',
 }
 </script>
 
