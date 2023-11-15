@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import * as RegisterValidation from '../_lib/constants/registerValidation'
+import * as RegisterValidation from '../_lib/constants/registerPolicy'
 import Icon from '../_lib/components/Icon.vue'
 import Layout from './Layout.vue'
 import { router } from './router'
@@ -230,3 +230,4 @@ h1 {
   font-size: 12px;
 }
 </style>
+../_lib/constants/registerPolicy
