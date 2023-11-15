@@ -1,29 +1,43 @@
 import { ref, inject } from 'vue'
 
 const isShowBottomSheet = ref(false)
-
-const openBottomSheet = (e) => {
+const handleOpenBottomSheet = (e) => {
   e.stopPropagation()
   isShowBottomSheet.value = true
 }
-
-const closeBottomSheet = (e) => {
+const handleCloseBottomSheet = (e) => {
   e.stopPropagation()
   isShowBottomSheet.value = false
 }
-
-const toggleBottomSheet = (e) => {
+const handleToggleBottomSheet = (e) => {
   e.stopPropagation()
   isShowBottomSheet.value = !isShowBottomSheet.value
+}
+
+export const tabs = [
+  {
+    key: 'tab1',
+    value: '관광지 탐색',
+  },
+  {
+    key: 'tab2',
+    value: '나의 여행계획',
+  },
+]
+const selectedTab = ref('tab1')
+const handleClickTab = (key) => {
+  selectedTab.value = key
 }
 
 export const provider = [
   'useBottomSheet',
   {
     isShowBottomSheet,
-    openBottomSheet,
-    closeBottomSheet,
-    toggleBottomSheet,
+    handleOpenBottomSheet,
+    handleCloseBottomSheet,
+    handleToggleBottomSheet,
+    selectedTab,
+    handleClickTab,
   },
 ]
 

@@ -1,12 +1,12 @@
 <script setup>
 import { useBottomSheet } from '../hooks/useBottomSheet'
 
-const { isShowBottomSheet, openBottomSheet } = useBottomSheet()
+const { isShowBottomSheet, handleOpenBottomSheet } = useBottomSheet()
 </script>
 
 <template>
   <div id="container">
-    <div id="handleBar" @click="openBottomSheet">
+    <div id="handleBar" @click="handleOpenBottomSheet">
       <div id="iconContainer">
         <div id="icon"></div>
       </div>

@@ -1,23 +1,10 @@
 <script setup>
-import { ref } from 'vue'
 import Tabs from '../_lib/components/Tabs.vue'
 import LocationSelect from './LocationSelect.vue'
 import { router } from '../views/router'
+import { tabs, useBottomSheet } from '../hooks/useBottomSheet'
 
-const options = [
-  {
-    key: 'tab1',
-    value: '관광지 탐색',
-  },
-  {
-    key: 'tab2',
-    value: '나의 여행계획',
-  },
-]
-const selectedOption = ref('tab1')
-const onChange = (key) => {
-  selectedOption.value = key
-}
+const { selectedTab, handleClickTab } = useBottomSheet()
 
 // TODO: auth guard 처리
 const navigateToLoginView = () => {
@@ -31,10 +18,10 @@ const navigateToRegisterView = () => {
 <template>
   <div id="container">
     <div id="tabs">
-      <Tabs :options="options" :selectedOption="selectedOption" :onChange="onChange" />
+      <Tabs :options="tabs" :selectedOption="selectedTab" :onChange="handleClickTab" />
     </div>
     <div id="panel">
-      <template v-if="selectedOption === 'tab1'">
+      <template v-if="selectedTab === 'tab1'">
         <LocationSelect />
       </template>
       <template v-else>
