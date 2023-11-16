@@ -29,7 +29,7 @@ const handleClickTab = (key) => {
   selectedTab.value = key
 }
 
-export const provider = [
+export const useBottomSheetProvider = [
   'useBottomSheet',
   {
     isShowBottomSheet,

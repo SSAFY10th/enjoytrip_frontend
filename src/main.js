@@ -9,7 +9,8 @@ import * as directives from 'vuetify/directives'
 
 import App from './App.vue'
 import { router } from './views/router'
-import { provider as bottomSheetProvider } from './hooks/useBottomSheet'
+import { useBottomSheetProvider } from './hooks/useBottomSheet'
+import { useKakaoMapProvider } from './hooks/useKakaoMap'
 
 const vuetify = createVuetify({
   components,
@@ -22,6 +23,7 @@ app.use(createPinia())
 app.use(router)
 app.use(vuetify)
 
-app.provide(...bottomSheetProvider)
+app.provide(...useBottomSheetProvider)
+app.provide(...useKakaoMapProvider)
 
 app.mount('#app')

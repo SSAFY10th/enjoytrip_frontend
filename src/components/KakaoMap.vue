@@ -1,19 +1,9 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
+import { useKakaoMap } from '../hooks/useKakaoMap'
 
-import { initializeMap } from '../hooks/useKakaoMap'
-
-let mapContainer = null
-let map = null
-
-const coordinate = ref({
-  latitude: 33.450701,
-  longitude: 126.570667,
-})
-
-onMounted(() => {
-  mapContainer = initializeMap(coordinate.value.latitude, coordinate.value.longitude)
-})
+const { onMountedCallback } = useKakaoMap()
+onMounted(onMountedCallback)
 </script>
 
 <template>
