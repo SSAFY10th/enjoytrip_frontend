@@ -2,6 +2,8 @@
 import { useBottomSheet } from '../hooks/useBottomSheet'
 
 const { isShowBottomSheet, handleOpenBottomSheet } = useBottomSheet()
+// TODO: 바텀시트가 올라와도 뒤에 있는 지도 드래그가 가능하도록 하고 싶다.
+// 하지만 그렇게하기 위해서는 Vuetify의 BottomSheet를 사용하지 않고 직접 구현해야한다.
 </script>
 
 <template>

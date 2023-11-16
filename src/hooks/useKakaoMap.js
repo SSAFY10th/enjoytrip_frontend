@@ -8,26 +8,6 @@ let clusterer = null
 let mapTypeControl = null
 let zoomControl = null
 
-const selectedSidoCode = ref('') // 서울이 default
-const selectedGugunCode = ref('')
-
-const gugunList = ref([])
-
-const handleSelectSidoOption = (sidoCode) => {
-  selectedSidoCode.value = sidoCode
-  selectedGugunCode.value = ''
-  gugunList.value = gugunObject[sidoCode]
-}
-
-const handleSelectGugunOption = (gugunCode) => {
-  selectedGugunCode.value = gugunCode
-}
-
-const coordinate = ref({
-  latitude: 33.450701,
-  longitude: 126.570667,
-})
-
 const onMountedCallback = () => {
   const {
     mapContainer: initializedMapContainer,
@@ -42,6 +22,35 @@ const onMountedCallback = () => {
   clusterer = initializedClusterer
   mapTypeControl = initializedMapTypeControl
   zoomControl = initializedZoomControl
+}
+
+const coordinate = ref({
+  latitude: 33.450701,
+  longitude: 126.570667,
+})
+
+const selectedSidoCode = ref('') // 서울이 default
+const selectedGugunCode = ref('')
+const gugunList = ref([])
+const handleSelectSidoOption = (sidoCode) => {
+  selectedSidoCode.value = sidoCode
+  selectedGugunCode.value = ''
+  gugunList.value = gugunObject[sidoCode]
+}
+const handleSelectGugunOption = (gugunCode) => {
+  selectedGugunCode.value = gugunCode
+}
+
+const inputKeyword = ref('')
+const handleSearchByKeyword = (e) => {
+  e.preventDefault()
+  displayMarker({
+    sidoCode: selectedSidoCode.value,
+    gugunCode: selectedGugunCode.value,
+    keyword: inputKeyword.value,
+    map,
+    clusterer,
+  })
 }
 
 watch(selectedSidoCode, (currentSidoCode, prevSidoCode) => {
@@ -74,6 +83,8 @@ export const useKakaoMapProvider = [
     gugunList,
     handleSelectSidoOption,
     handleSelectGugunOption,
+    inputKeyword,
+    handleSearchByKeyword,
   },
 ]
 

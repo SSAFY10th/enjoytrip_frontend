@@ -97,7 +97,6 @@ export const displayMarker = ({ sidoCode, gugunCode, keyword, map, clusterer }) 
     )
     .then((res) => res.json())
     .then((data) => {
-      console.log(data)
       const fetchedLocations = data.response.body.items.item || []
       const positions = fetchedLocations.map(
         ({ title, firstimage, firstimage2, addr1, addr2, mapy, mapx, tel, zipcode }) => ({

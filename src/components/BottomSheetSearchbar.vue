@@ -1,23 +1,12 @@
 <script setup>
-import { ref } from 'vue'
+import { useKakaoMap } from '../hooks/useKakaoMap'
 
-const inputText = ref('')
-
-const onSubmit = () => {
-  if (!inputText.value) {
-    return
-  }
-
-  window.alert('개발 중인 기능이에요.')
-
-  console.log(inputText.value)
-  inputText.value = ''
-}
+const { inputKeyword, handleSearchByKeyword } = useKakaoMap()
 </script>
 
 <template>
-  <form @submit.prevent="onSubmit" id="container">
-    <input class="input" type="search" v-model="inputText" placeholder="여행지를 찾아보세요!" />
+  <form @submit.prevent="handleSearchByKeyword" id="container">
+    <input class="input" type="search" v-model="inputKeyword" placeholder="여행지를 찾아보세요!" />
     <button type="submit" class="button">
       <svg xmlns="http://www.w3.org/2000/svg" height="1em" stroke="#19CE60" viewBox="0 0 512 512">
         <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
