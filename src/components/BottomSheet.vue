@@ -13,7 +13,7 @@ const { isShowBottomSheet, handleOpenBottomSheet } = useBottomSheet()
     </div>
     <div class="text-center rounded-xl">
       <v-bottom-sheet v-model="isShowBottomSheet">
-        <v-card class="text-center" height="600">
+        <v-card class="text-center" height="550">
           <v-card-text>
             <slot></slot>
           </v-card-text>

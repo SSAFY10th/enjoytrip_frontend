@@ -1,3 +1,51 @@
+const MARKER_IMAGE_SRC = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png'
+
+const makeDisplayMarkerQueryStringUrl = ({ sidoCode, gugunCode, keyword }) => {
+  let queryString = `serviceKey=${
+    import.meta.env.VITE_OPEN_DATA_SERVICE_KEY
+  }&numOfRows=100&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json&listYN=Y&arrange=A`
+  if (!!sidoCode) {
+    queryString += `&areaCode=${sidoCode}`
+  }
+  if (!!gugunCode) {
+    queryString += `&sigunguCode=${gugunCode}`
+  }
+  let service = ''
+  if (!!keyword) {
+    service = `searchKeyword1`
+    queryString += `&keyword=${keyword}`
+  } else {
+    service = `areaBasedList1`
+  }
+  return `${import.meta.env.VITE_OPEN_DATA_API_END_POINT}${service}?${queryString}`
+}
+
+const makeMarkerHtml = (position) => {
+  return `
+    <div class="wrap">
+      <div class="info">  
+        <div class="title">
+            ${position.title}
+          </div>
+        <div class="body">
+              <div class="img">
+                  <img src=${
+                    position.firstimage ??
+                    position.firstimage2 ??
+                    'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png'
+                  } width="73" height="70">
+            </div>
+              <div class="desc">
+                <div class="ellipsis">${position.addr1}</div>
+                <div class="jibun ellipsis">${position.addr2}</div>
+                <div class="jibun ellipsis">(우) ${position.zipcode} (tel) ${position.tel}</div>
+            </div>
+        </div>
+      </div>   
+    </div>
+  `
+}
+
 export const initializeMap = (latitude, longitude) => {
   const mapContainer = document.getElementById('map')
   const options = {
@@ -29,5 +77,90 @@ export const initializeMap = (latitude, longitude) => {
     clusterer,
     mapTypeControl,
     zoomControl,
+  }
+}
+
+let markers = []
+export const displayMarker = ({ sidoCode, gugunCode, keyword, map, clusterer }) => {
+  if (!!sidoCode) {
+    map.setLevel(11)
+  }
+
+  window
+    .fetch(
+      makeDisplayMarkerQueryStringUrl({
+        sidoCode,
+        gugunCode,
+        keyword,
+      }),
+    )
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data)
+      const fetchedLocations = data.response.body.items.item || []
+      const positions = fetchedLocations.map(
+        ({ title, firstimage, firstimage2, addr1, addr2, mapy, mapx, tel, zipcode }) => ({
+          title,
+          firstimage,
+          firstimage2,
+          latlng: new window.kakao.maps.LatLng(mapy, mapx),
+          addr1,
+          addr2,
+          tel,
+          zipcode,
+        }),
+      )
+
+      if (markers.length > 0) {
+        clusterer.removeMarkers(markers)
+        markers = []
+      }
+
+      positions.forEach((position) => {
+        const imageSize = new window.kakao.maps.Size(24, 35)
+        const marker = new kakao.maps.Marker({
+          map, // 마커를 표시할 지도
+          position: position.latlng, // 마커를 표시할 위치
+          title: position.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+          image: new window.kakao.maps.MarkerImage(MARKER_IMAGE_SRC, imageSize),
+          clickable: true,
+        })
+
+        markers.push(marker)
+
+        const infowindow = new kakao.maps.InfoWindow({
+          content: makeMarkerHtml(position), // 인포윈도우에 표시할 내용
+        })
+
+        // 마커에 이벤트 추가
+        // mouseover: 정보창 표시
+        // mouseout: 정보창 비표시
+        window.kakao.maps.event.addListener(
+          marker,
+          'mouseover',
+          makeOverListener(map, marker, infowindow),
+        )
+        window.kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow))
+      })
+
+      clusterer.addMarkers(markers)
+      // 첫번째 검색 정보를 이용하여 지도 중심을 이동 시킵니다
+      if (map.getLevel() != 13 && positions.length > 0) {
+        map.setCenter(positions[0].latlng)
+      }
+    })
+}
+
+// 인포윈도우 여는 함수
+function makeOverListener(map, marker, infowindow) {
+  return function () {
+    infowindow.open(map, marker)
+  }
+}
+
+// 인포윈도우를 닫는 클로저를 만드는 함수입니다
+function makeOutListener(infowindow) {
+  return function () {
+    infowindow.close()
   }
 }
