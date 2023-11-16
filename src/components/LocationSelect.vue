@@ -1,22 +1,10 @@
 <script setup>
-import { ref } from 'vue'
 import { sidoList } from '../_lib/data/sido'
-import { gugunObject } from '../_lib/data/gugun'
+import { useKakaoMap } from '../hooks/useKakaoMap'
 
-const selectedSidoCode = ref('') // 서울이 default
-const selectedGugunCode = ref('')
-
-const gugunList = ref([])
-
-const clickSidoOption = (sidoCode) => {
-  selectedSidoCode.value = sidoCode
-  selectedGugunCode.value = ''
-  gugunList.value = gugunObject[sidoCode]
-}
-
-const clickGugunOption = (gugunCode) => {
-  selectedGugunCode.value = gugunCode
-}
+// TODO: selectedSidoCode, selectedGugunCode의 상태를 유지하면 더 좋을 것 같다.
+// 그러기 위해서는 Vuetify의 v-select를 사용하지 않고 Select 컴포넌트를 직접 구현해야한다.
+const { gugunList, handleSelectSidoOption, handleSelectGugunOption } = useKakaoMap()
 </script>
 
 <template>
@@ -26,14 +14,14 @@ const clickGugunOption = (gugunCode) => {
       :items="sidoList"
       item-value="code"
       item-title="name"
-      @update:model-value="clickSidoOption"
+      @update:model-value="handleSelectSidoOption"
     ></v-select>
     <v-select
       label="구/군"
       :items="gugunList"
       item-value="code"
       item-title="name"
-      @update:model-value="clickGugunOption"
+      @update:model-value="handleSelectGugunOption"
     ></v-select>
   </div>
 </template>
