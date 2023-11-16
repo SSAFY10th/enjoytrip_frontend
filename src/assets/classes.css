@@ -1,0 +1,77 @@
+@import './base.css';
+
+.color-green {
+  color: var(--color-green);
+}
+
+.color-green-hard {
+  color: var(--color-green-hard);
+}
+
+.color-orange {
+  color: var(--color-orange);
+}
+
+.color-blue {
+  color: var(--color-blue);
+}
+
+.color-gray {
+  color: var(--color-gray);
+}
+
+.color-gray-hard {
+  color: var(--color-gray-hard);
+}
+
+.font-sm {
+  font-size: var(--font-sm);
+}
+
+.font-lg {
+  font-size: var(--font-lg);
+}
+
+.font-xlg {
+  font-size: var(--font-xlg);
+}
+
+.button {
+  display: inline-block;
+  width: 100%;
+  cursor: pointer;
+  padding: 8px 16px;
+  background-color: var(--color-primary);
+  border: none;
+  text-align: center;
+  border-radius: 4px;
+  border: 1px solid #fafafa;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+
+  &:hover {
+    background-color: var(--color-primary-hover);
+  }
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  background-color: var(--color-primary-hover);
+}
+
+.input {
+  display: block;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.input:focus {
+  border: 2px solid var(--color-primary);
+}
