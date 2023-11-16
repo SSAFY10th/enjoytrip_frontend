@@ -1,9 +1,9 @@
+const { VITE_OPEN_DATA_SERVICE_KEY, VITE_OPEN_DATA_API_END_POINT } = import.meta.env
+
 const MARKER_IMAGE_SRC = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png'
 
 const makeDisplayMarkerQueryStringUrl = ({ sidoCode, gugunCode, keyword }) => {
-  let queryString = `serviceKey=${
-    import.meta.env.VITE_OPEN_DATA_SERVICE_KEY
-  }&numOfRows=100&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json&listYN=Y&arrange=A`
+  let queryString = `serviceKey=${VITE_OPEN_DATA_SERVICE_KEY}&numOfRows=100&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json&listYN=Y&arrange=A`
   if (!!sidoCode) {
     queryString += `&areaCode=${sidoCode}`
   }
@@ -17,9 +17,10 @@ const makeDisplayMarkerQueryStringUrl = ({ sidoCode, gugunCode, keyword }) => {
   } else {
     service = `areaBasedList1`
   }
-  return `${import.meta.env.VITE_OPEN_DATA_API_END_POINT}${service}?${queryString}`
+  return `${VITE_OPEN_DATA_API_END_POINT}${service}?${queryString}`
 }
 
+// TODO: template의 디자인을 더 예쁘게 만들면 좋을 것 같다.
 const makeMarkerHtml = (position) => {
   return `
     <div class="wrap">
