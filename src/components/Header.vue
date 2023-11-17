@@ -1,7 +1,8 @@
 <script setup>
+import { useAuth } from '../hooks/useAuth'
 import { router } from '../views/router'
 
-// TODO: auth guard 처리
+const { isLoggedIn, currentUser } = useAuth()
 
 const navigateToLoginView = () => {
   router.push('/auth/login')
@@ -10,7 +11,12 @@ const navigateToLoginView = () => {
 
 <template>
   <div id="header">
-    <button id="loginButton" class="button" @click="navigateToLoginView">로그인</button>
+    <template v-if="!isLoggedIn">
+      <button id="loginButton" class="button" @click="navigateToLoginView">로그인</button>
+    </template>
+    <template v-else>
+      <div id="auth">{{ currentUser.username }}님</div>
+    </template>
   </div>
 </template>
 
@@ -27,5 +33,17 @@ const navigateToLoginView = () => {
   right: 3px;
   z-index: 99;
   border: 3px solid #fafafa;
+}
+
+#auth {
+  background-color: #fafafa;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  z-index: 99;
+  padding: 10px;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 24px;
 }
 </style>
