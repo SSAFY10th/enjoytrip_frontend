@@ -35,7 +35,7 @@ const navigateToRegisterView = () => {
           </div>
         </div>
         <div v-else id="userPlanPanel">
-          <RouterLink to="/plan/create" id="planCreateButton">
+          <RouterLink to="/plan/create/date" id="planCreateButton">
             + 새로운 여행계획 만들기
           </RouterLink>
           <ul id="userPlanList"></ul>

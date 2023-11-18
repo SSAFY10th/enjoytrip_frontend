@@ -1,21 +1,41 @@
-import { ref } from 'vue'
-import { defineStore } from 'pinia'
+import { ref, computed, inject } from 'vue'
 
-/*
+// TODO: 세션과 쿠키를 통한 로그인 유무 처리
+// TODO: 로그인 유무에 따른 네비게이션 가드
+const currentUser = ref(null)
 
-type CurrentUser = {
-  userId: number;
-  username: string;
-}
+const isLoggedIn = computed(() => {
+  return !!currentUser.value
+})
 
-*/
+const isAdmin = computed(() => {
+  return !!currentUser.value && currentUser.isAdmin
+})
 
-export const useAuth = defineStore('useAuth', () => {
-  const isLoggedIn = ref(true)
-  const currentUser = ref({
+// TODO: 더미데이터를 실제 데이터로 바꾸기
+const login = (
+  user = {
     userId: 1,
     username: '용상윤',
-  })
+    isAdmin: false,
+  },
+) => {
+  currentUser.value = user
+}
 
-  return { isLoggedIn, currentUser }
-})
+const logout = () => {
+  currentUser.value = null
+}
+
+export const useAuthProvider = [
+  'useAuth',
+  {
+    currentUser,
+    isLoggedIn,
+    isAdmin,
+    login,
+    logout,
+  },
+]
+
+export const useAuth = () => inject('useAuth')

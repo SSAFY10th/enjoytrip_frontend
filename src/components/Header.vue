@@ -2,10 +2,11 @@
 import { useAuth } from '../hooks/useAuth'
 import { router } from '../views/router'
 
-const { isLoggedIn, currentUser } = useAuth()
+const { isLoggedIn, currentUser, login, logout } = useAuth()
 
 const navigateToLoginView = () => {
-  router.push('/auth/login')
+  login()
+  //router.push('/auth/login')
 }
 </script>
 
@@ -15,7 +16,10 @@ const navigateToLoginView = () => {
       <button id="loginButton" class="button" @click="navigateToLoginView">로그인</button>
     </template>
     <template v-else>
-      <div id="auth">{{ currentUser.username }}님</div>
+      <div id="auth">
+        <div>{{ currentUser.username }}님</div>
+        <button class="button" @click="logout">logout</button>
+      </div>
     </template>
   </div>
 </template>

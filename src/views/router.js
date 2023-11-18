@@ -20,9 +20,19 @@ export const router = createRouter({
       component: () => import('./LoginView.vue'),
     },
     {
-      path: '/plan/create',
-      name: 'createPlan',
-      component: () => import('./CreatePlanView.vue'),
+      path: '/plan/create/date',
+      name: 'selectDate',
+      component: () => import('./CreatePlan/SelectDate.vue'),
+    },
+    {
+      path: '/plan/create/place',
+      name: 'selectPlace',
+      component: () => import('./CreatePlan/SelectPlace.vue'),
+    },
+    {
+      path: '/plan/create/content',
+      name: 'writeContent',
+      component: () => import('./CreatePlan/WriteContent.vue'),
     },
     {
       path: '/:pathMatch(.*)*',
