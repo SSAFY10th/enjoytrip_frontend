@@ -8,14 +8,23 @@ let clusterer = null
 let mapTypeControl = null
 let zoomControl = null
 
-const onMountedCallback = () => {
+const coordinate = ref({
+  latitude: 33.450701,
+  longitude: 126.570667,
+})
+
+const onMountedCallback = (mapContainerId) => {
   const {
     mapContainer: initializedMapContainer,
     map: initializedMap,
     clusterer: initializedClusterer,
     mapTypeControl: initializedMapTypeControl,
     zoomControl: initializedZoomControl,
-  } = initializeMap(coordinate.value.latitude, coordinate.value.longitude)
+  } = initializeMap({
+    mapContainerId,
+    latitude: coordinate.value.latitude,
+    longitude: coordinate.value.longitude,
+  })
 
   mapContainer = initializedMapContainer
   map = initializedMap
@@ -23,11 +32,6 @@ const onMountedCallback = () => {
   mapTypeControl = initializedMapTypeControl
   zoomControl = initializedZoomControl
 }
-
-const coordinate = ref({
-  latitude: 33.450701,
-  longitude: 126.570667,
-})
 
 const selectedSidoCode = ref('') // 서울이 default
 const selectedGugunCode = ref('')

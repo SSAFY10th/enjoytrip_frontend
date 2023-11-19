@@ -3,7 +3,7 @@ import { onMounted } from 'vue'
 import { useKakaoMap } from '../hooks/useKakaoMap'
 
 const { onMountedCallback } = useKakaoMap()
-onMounted(onMountedCallback)
+onMounted(() => onMountedCallback('map'))
 </script>
 
 <template>

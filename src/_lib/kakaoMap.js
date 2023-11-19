@@ -47,8 +47,8 @@ const makeMarkerHtml = (position) => {
   `
 }
 
-export const initializeMap = (latitude, longitude) => {
-  const mapContainer = document.getElementById('map')
+export const initializeMap = ({ latitude, longitude, mapContainerId }) => {
+  const mapContainer = document.getElementById(mapContainerId)
   const options = {
     center: new window.kakao.maps.LatLng(latitude, longitude),
     level: 3, // 지도의 확대 레벨
