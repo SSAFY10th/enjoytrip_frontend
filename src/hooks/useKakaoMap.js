@@ -7,13 +7,14 @@ let map = null
 let clusterer = null
 let mapTypeControl = null
 let zoomControl = null
+let markerClickHandler = null
 
 const coordinate = ref({
   latitude: 33.450701,
   longitude: 126.570667,
 })
 
-const onMountedCallback = (mapContainerId) => {
+const onMountedCallback = (mapContainerId, options) => {
   const {
     mapContainer: initializedMapContainer,
     map: initializedMap,
@@ -31,6 +32,10 @@ const onMountedCallback = (mapContainerId) => {
   clusterer = initializedClusterer
   mapTypeControl = initializedMapTypeControl
   zoomControl = initializedZoomControl
+
+  if (options?.markerClickHandler) {
+    markerClickHandler = options.markerClickHandler
+  }
 }
 
 const selectedSidoCode = ref('') // 서울이 default
@@ -54,6 +59,7 @@ const handleSearchByKeyword = (e) => {
     keyword: inputKeyword.value,
     map,
     clusterer,
+    markerClickHandler,
   })
 }
 
@@ -64,6 +70,7 @@ watch(selectedSidoCode, (currentSidoCode, prevSidoCode) => {
     keyword: '',
     map,
     clusterer,
+    markerClickHandler,
   })
 })
 
@@ -74,6 +81,7 @@ watch(selectedGugunCode, (currentGugunCode, prevGugunCode) => {
     keyword: '',
     map,
     clusterer,
+    markerClickHandler,
   })
 })
 

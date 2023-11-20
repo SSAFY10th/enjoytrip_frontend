@@ -4,7 +4,7 @@ import Header from '../components/Header.vue'
 import KakaoMap from '../components/KakaoMap.vue'
 import BottomSheet from '../components/BottomSheet.vue'
 import BottomSheetPanel from '../components/BottomSheetPanel.vue'
-import BottomSheetSearchbar from '../components/BottomSheetSearchbar.vue'
+import LocationSearchBar from '../components/LocationSearchBar.vue'
 </script>
 
 <template>
@@ -13,7 +13,7 @@ import BottomSheetSearchbar from '../components/BottomSheetSearchbar.vue'
     <KakaoMap />
     <BottomSheet>
       <section id="contents">
-        <BottomSheetSearchbar />
+        <LocationSearchBar />
         <BottomSheetPanel />
       </section>
     </BottomSheet>
