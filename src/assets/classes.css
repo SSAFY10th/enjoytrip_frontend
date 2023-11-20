@@ -38,7 +38,6 @@
 
 .button {
   display: inline-block;
-  width: 100%;
   cursor: pointer;
   padding: 8px 16px;
   background-color: var(--color-primary);

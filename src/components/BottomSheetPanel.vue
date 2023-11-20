@@ -3,8 +3,10 @@ import Tabs from '../_lib/components/Tabs.vue'
 import LocationSelect from './LocationSelect.vue'
 import { router } from '../views/router'
 import { tabs, useBottomSheet } from '../hooks/useBottomSheet'
+import { useAuth } from '../hooks/useAuth'
 
 const { selectedTab, handleClickTab } = useBottomSheet()
+const { isLoggedIn } = useAuth()
 
 // TODO: auth guard 처리
 const navigateToLoginView = () => {
@@ -25,15 +27,15 @@ const navigateToRegisterView = () => {
         <LocationSelect />
       </template>
       <template v-else>
-        <!-- <div id="loginGuidePanel">
+        <div v-if="!isLoggedIn" id="loginGuidePanel">
           <div class="font-xlg" style="font-weight: 600">로그인이 필요한 서비스에요</div>
           <div id="loginGuideButtons">
             <button class="button" @click="navigateToRegisterView">회원가입</button>
             <button class="button" @click="navigateToLoginView">로그인</button>
           </div>
-        </div> -->
-        <div id="userPlanPanel">
-          <RouterLink to="/plan/create" id="planCreateButton">
+        </div>
+        <div v-else id="userPlanPanel">
+          <RouterLink to="/plan/create/date" id="planCreateButton">
             + 새로운 여행계획 만들기
           </RouterLink>
           <ul id="userPlanList"></ul>

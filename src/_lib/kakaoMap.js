@@ -1,5 +1,6 @@
 const { VITE_OPEN_DATA_SERVICE_KEY, VITE_OPEN_DATA_API_END_POINT } = import.meta.env
 
+export const NO_IMAGE_SRC = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png'
 const MARKER_IMAGE_SRC = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png'
 
 const makeDisplayMarkerQueryStringUrl = ({ sidoCode, gugunCode, keyword }) => {
@@ -31,9 +32,7 @@ const makeMarkerHtml = (position) => {
         <div class="body">
               <div class="img">
                   <img src=${
-                    position.firstimage ??
-                    position.firstimage2 ??
-                    'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png'
+                    position.firstimage ?? position.firstimage2 ?? `${NO_IMAGE_SRC}`
                   } width="73" height="70">
             </div>
               <div class="desc">
@@ -47,8 +46,8 @@ const makeMarkerHtml = (position) => {
   `
 }
 
-export const initializeMap = (latitude, longitude) => {
-  const mapContainer = document.getElementById('map')
+export const initializeMap = ({ latitude, longitude, mapContainerId }) => {
+  const mapContainer = document.getElementById(mapContainerId)
   const options = {
     center: new window.kakao.maps.LatLng(latitude, longitude),
     level: 3, // 지도의 확대 레벨
@@ -82,7 +81,14 @@ export const initializeMap = (latitude, longitude) => {
 }
 
 let markers = []
-export const displayMarker = ({ sidoCode, gugunCode, keyword, map, clusterer }) => {
+export const displayMarker = ({
+  sidoCode,
+  gugunCode,
+  keyword,
+  map,
+  clusterer,
+  markerClickHandler,
+}) => {
   if (!!sidoCode) {
     map.setLevel(11)
   }
@@ -99,7 +105,19 @@ export const displayMarker = ({ sidoCode, gugunCode, keyword, map, clusterer }) 
     .then((data) => {
       const fetchedLocations = data.response.body.items.item || []
       const positions = fetchedLocations.map(
-        ({ title, firstimage, firstimage2, addr1, addr2, mapy, mapx, tel, zipcode }) => ({
+        ({
+          title,
+          firstimage,
+          firstimage2,
+          addr1,
+          addr2,
+          mapy,
+          mapx,
+          tel,
+          zipcode,
+          contentid,
+        }) => ({
+          contentid,
           title,
           firstimage,
           firstimage2,
@@ -125,6 +143,7 @@ export const displayMarker = ({ sidoCode, gugunCode, keyword, map, clusterer }) 
           image: new window.kakao.maps.MarkerImage(MARKER_IMAGE_SRC, imageSize),
           clickable: true,
         })
+        marker.information = position
 
         markers.push(marker)
 
@@ -141,6 +160,12 @@ export const displayMarker = ({ sidoCode, gugunCode, keyword, map, clusterer }) 
           makeOverListener(map, marker, infowindow),
         )
         window.kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow))
+
+        if (markerClickHandler) {
+          window.kakao.maps.event.addListener(marker, 'click', () => {
+            markerClickHandler(marker)
+          })
+        }
       })
 
       clusterer.addMarkers(markers)
