@@ -181,7 +181,7 @@ const navigateToBack = () => {
       <button
         type="submit"
         class="button"
-        style="color: white; margin-top: 50px"
+        style="color: white; margin-top: 50px; width: 100%"
         :disabled="!isValidateForm"
       >
         가입하기
