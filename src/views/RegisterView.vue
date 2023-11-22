@@ -4,8 +4,9 @@ import * as RegisterValidation from '../_lib/constants/registerPolicy'
 import Icon from '../_lib/components/Icon.vue'
 import Layout from './Layout.vue'
 import { router } from './router'
+import * as AuthApi from '../apis/auth'
 
-const isCheckedUserId = ref(false)
+const isDuplicated = ref('idle') // idle, impossible, possible
 
 const values = ref({
   userId: '',
@@ -38,8 +39,8 @@ const isError = {
 
 const handleChangeUserId = (e) => {
   values.value.userId = e.target.value
-  isCheckedUserId.value = false
   isTouched.value.userId = true
+  isDuplicated.value = 'idle'
 }
 const handleChangeEmail = (e) => {
   values.value.email = e.target.value
@@ -55,32 +56,53 @@ const handleChangePasswordConfirm = (e) => {
 }
 
 const isValidateForm = computed(() => {
-  if (!isCheckedUserId.value) {
-    return false
-  }
-
   return (
     Object.values(isTouched.value).every((value) => !!value) &&
     Object.values(isError).every((ref) => !ref.value)
   )
 })
 
-const handleSubmit = () => {
+const handleCheckUserId = async () => {
+  if (!RegisterValidation.validateUserId(values.value.userId)) {
+    window.alert(RegisterValidation.invalidUserIdMessage)
+    return
+  }
+
+  const isPossible = await AuthApi.checkId(values.value.userId)
+  isPossible ? (isDuplicated.value = 'possible') : (isDuplicated.value = 'impossible')
+}
+
+const handleSubmit = async () => {
   if (!isValidateForm.value) {
     window.alert('회원가입 정책을 지켜주세요.')
     return
   }
 
-  console.log(values.value)
-}
-
-const handleCheckUserId = () => {
-  if (!values.value.userId) {
+  if (isDuplicated.value === 'idle') {
+    window.alert('아이디 중복검사를 해주세요')
     return
   }
 
-  // TODO: API call
-  isCheckedUserId.value = true
+  if (isDuplicated.value === 'impossible') {
+    window.alert('다른 아이디를 사용해주세요')
+    return
+  }
+
+  try {
+    await AuthApi.join({
+      userId: values.value.userId,
+      userName: values.value.userId,
+      userNickname: values.value.userId,
+      userEmail: values.value.email,
+      userPassword: values.value.password,
+    })
+    window.alert(
+      `아이디 ${values.value.userId}로 회원가입이 성공했어요. 로그인 페이지로 이동할게요.`,
+    )
+    router.push('/auth/login')
+  } catch (e) {
+    window.alert('다시 시도해주세요.')
+  }
 }
 
 const navigateToBack = () => {
@@ -96,7 +118,7 @@ const navigateToBack = () => {
       </div>
       <h1>EnjoyTrip 회원가입</h1>
     </header>
-    <form @submit.prevent="handleSubmit">
+    <div>
       <div class="input-group">
         <label for="userId">ID</label>
         <div style="display: flex">
@@ -111,20 +133,24 @@ const navigateToBack = () => {
             @change="handleChangeUserId"
             placeholder="로그인에 사용될 아이디를 입력해주세요"
           />
-          <button
-            style="flex: 1; font-size: 14px"
-            class="button"
-            @click="handleCheckUserId"
-            :disabled="!isTouched.userId || isError.userId.value"
-          >
+          <button style="flex: 1; font-size: 14px" class="button" @click="handleCheckUserId">
             중복 확인
           </button>
         </div>
         <div v-if="isError.userId.value" class="error">
           {{ RegisterValidation.invalidUserIdMessage }}
         </div>
-        <div v-else-if="isTouched.userId && isCheckedUserId" style="color: green; font-weight: 800">
+        <div
+          v-else-if="isTouched.userId && isDuplicated === 'possible'"
+          style="color: green; font-weight: 800"
+        >
           사용 가능한 아이디입니다
+        </div>
+        <div
+          v-else-if="isTouched.userId && isDuplicated === 'impossible'"
+          style="color: tomato; font-weight: 800"
+        >
+          사용 불가능한 아이디입니다
         </div>
       </div>
 
@@ -179,14 +205,15 @@ const navigateToBack = () => {
         </div>
       </div>
       <button
-        type="submit"
+        type="button"
         class="button"
         style="color: white; margin-top: 50px; width: 100%"
         :disabled="!isValidateForm"
+        @click="handleSubmit"
       >
         가입하기
       </button>
-    </form>
+    </div>
   </Layout>
 </template>
 

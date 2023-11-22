@@ -2,6 +2,7 @@
 // TODO: 이 페이지는 URL을 통해 직접 접근할 수 없는 페이지이다. 반드시 SelectPlace 페이지에서 장소를 선택완료한 뒤 접근해야한다.
 import { ref } from 'vue'
 import { useCreatePlan } from '../../hooks/useCreatePlan'
+import { router } from '../router'
 
 const { selectedPlaceList } = useCreatePlan()
 
