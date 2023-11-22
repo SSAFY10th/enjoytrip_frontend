@@ -1,4 +1,3 @@
-import { HttpError } from '../_lib/utils/HttpError'
 import { requestBuilder } from './config'
 
 const {
@@ -24,35 +23,22 @@ export const join = async ({ userId, userPassword, userNickname, userName, userE
     user_name: userName,
     user_email: userEmail,
   })
-
-  if (res.status < 400) {
-    return res.data.data
-  }
-
-  throw new HttpError({ statusCode: res.status, message: 'join error' })
+  return res.data.data
 }
 
 export const login = async ({ userId, userPassword }) => {
-  try {
-    const res = await request.post('/auth', {
-      sign: VITE_SIGN_AUTH_LOGIN,
-      user_id: userId,
-      user_password: userPassword,
-    })
-    return res.data.data
-  } catch (e) {
-    throw new HttpError({ statusCode: res.status, message: 'login error' })
-  }
+  const res = await request.post('/auth', {
+    sign: VITE_SIGN_AUTH_LOGIN,
+    user_id: userId,
+    user_password: userPassword,
+  })
+  return res.data.data
 }
 
 export const logout = async () => {
-  try {
-    await request.post('/user', {
-      sign: VITE_SIGN_AUTH_LOGOUT,
-    })
-  } catch (e) {
-    throw new HttpError({ statusCode: res.status, message: 'logout error' })
-  }
+  await request.post('/user', {
+    sign: VITE_SIGN_AUTH_LOGOUT,
+  })
 }
 
 export const checkId = async (userId) => {

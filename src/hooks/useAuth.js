@@ -52,7 +52,11 @@ const login = async ({ userId: inputUserId, userPassword: inputUserPassword }) =
 }
 
 const logout = async () => {
-  await AuthApi.logout()
+  try {
+    await AuthApi.logout()
+  } catch (e) {
+    console.log('logout error')
+  }
   currentUser.value = null
   deleteUserCookie()
 }
