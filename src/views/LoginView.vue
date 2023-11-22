@@ -1,9 +1,14 @@
 <script setup>
 import { ref, computed } from 'vue'
+
 import * as RegisterValidation from '../_lib/constants/registerPolicy'
 import Icon from '../_lib/components/Icon.vue'
-import Layout from './Layout.vue'
+import { HttpError } from '../_lib/utils/HttpError'
+import { useAuth } from '../hooks/useAuth'
 import { router } from './router'
+import Layout from './Layout.vue'
+
+const { login } = useAuth()
 
 const values = ref({
   userId: '',
@@ -18,14 +23,26 @@ const isValidateForm = computed(() => {
   )
 })
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (!isValidateForm.value) {
+    window.alert('아이디나 비밀번호를 다시 확인해주세요.')
     return
   }
 
-  // TODO: API call
-
-  console.log(values.value)
+  try {
+    await login({
+      userId: values.value.userId,
+      userPassword: values.value.password,
+    })
+    router.replace('/')
+  } catch (e) {
+    console.log(e)
+    if (e instanceof HttpError) {
+      window.alert('아이디나 비밀번호를 다시 확인해주세요.')
+      return
+    }
+    window.alert('일시적으로 요청을 처리할 수 없어요.')
+  }
 }
 
 const navigateToBack = () => {
@@ -70,12 +87,7 @@ const navigateToBack = () => {
         />
       </div>
 
-      <button
-        type="submit"
-        class="button"
-        style="color: white; margin-top: 50px"
-        :disabled="!isValidateForm"
-      >
+      <button type="submit" class="button" style="color: white; margin-top: 50px; width: 100%">
         로그인
       </button>
     </form>
