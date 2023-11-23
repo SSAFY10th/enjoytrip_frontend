@@ -5,6 +5,7 @@ import { router } from '../views/router'
 import { tabs, useBottomSheet } from '../hooks/useBottomSheet'
 import { useAuth } from '../hooks/useAuth'
 import * as AuthApi from '../apis/auth'
+import { formatDateFromISOString } from '../_lib/utils/date'
 
 const { selectedTab, handleClickTab } = useBottomSheet()
 const { isLoggedIn, planList, currentUser, logout, fetchPlanList } = useAuth()
@@ -80,7 +81,16 @@ const navigateToRegisterView = () => {
           <ul id="userPlanList">
             <li v-for="planItem in planList" :key="planItem.plan_id">
               <div>
-                {{ planItem.title }} | {{ planItem.plan_date }} | 조회수 : {{ planItem.hit }}
+                {{ planItem.title }} |
+                {{
+                  planItem.plan_date
+                    .split('~')
+                    .map((ISOString) =>
+                      Object.values(formatDateFromISOString(ISOString)).join('. '),
+                    )
+                    .join('~')
+                }}
+                | 조회수 : {{ planItem.hit }}
                 <button class="button" @click="handleDeletePlanItem(planItem.plan_id)">삭제</button>
               </div>
             </li>
