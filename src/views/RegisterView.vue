@@ -103,8 +103,12 @@ const handleCheckUserId = async () => {
     return
   }
 
-  const isPossible = await AuthApi.checkId(values.value.userId)
-  isPossible ? (isDuplicated.value = 'possible') : (isDuplicated.value = 'impossible')
+  try {
+    await AuthApi.checkId(values.value.userId)
+    isDuplicated.value = 'possible'
+  } catch (e) {
+    isDuplicated.value = 'impossible'
+  }
 }
 
 const handleSubmit = async () => {

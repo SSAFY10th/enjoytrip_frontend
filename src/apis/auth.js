@@ -12,6 +12,7 @@ const {
   VITE_SIGN_DELETE_2_PLAN,
   VITE_SIGN_AUTHORIZE_EMAIL,
   VITE_SIGN_AUTHORIZE_EMAIL_TOKEN_CHECK,
+  VITE_SIGN_SEND_MENTION_WHEN_CREATE_PLAN,
 } = import.meta.env
 
 export const join = async ({ userId, userPassword, userNickname, userName, userEmail }) => {
@@ -42,15 +43,10 @@ export const logout = async () => {
 }
 
 export const checkId = async (userId) => {
-  try {
-    await mainRequest.post('/auth', {
-      sign: VITE_SIGN_AUTH_CHECK_ID,
-      user_id: userId,
-    })
-    return true
-  } catch (e) {
-    return false
-  }
+  await mainRequest.post('/auth', {
+    sign: VITE_SIGN_AUTH_CHECK_ID,
+    user_id: userId,
+  })
 }
 
 export const searchUser = async (keyword) => {
@@ -113,4 +109,11 @@ export const authorizeEmailTokenCheck = async (inputToken) => {
     sign: VITE_SIGN_AUTHORIZE_EMAIL_TOKEN_CHECK,
     token: inputToken,
   })
+}
+
+export const sendMentionWhenCreatePlan = async () => {
+  const res = await mainRequest.post('/plan', {
+    sign: VITE_SIGN_SEND_MENTION_WHEN_CREATE_PLAN,
+  })
+  return res.data.data
 }

@@ -35,7 +35,7 @@ const handleSubmit = async () => {
     })
     router.replace('/')
   } catch (e) {
-    if (e.response.status < 500) {
+    if (e.response && e.response.status < 500) {
       window.alert('아이디나 비밀번호를 다시 확인해주세요.')
       return
     }

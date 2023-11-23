@@ -15,12 +15,13 @@ const setCurrentUser = ({ userId, userNickname, userKey }) => {
 }
 
 const fetchPlanList = async () => {
-  try {
-    const fetchedPlanList = await AuthApi.getPlanList(currentUser.value.userId)
-    planList.value = fetchedPlanList
-  } catch (e) {
-    console.error(e)
-  }
+  const fetchedPlanList = await AuthApi.getPlanList(currentUser.value.userId)
+  planList.value = fetchedPlanList
+}
+
+const fetchAlert = async () => {
+  const data = await AuthApi.sendMentionWhenCreatePlan()
+  console.log(data)
 }
 
 const onMountedCallback = async () => {
@@ -29,7 +30,13 @@ const onMountedCallback = async () => {
     return
   }
   setCurrentUser(userCookie)
-  await fetchPlanList()
+
+  try {
+    await fetchPlanList()
+    await fetchAlert()
+  } catch (e) {
+    await logout()
+  }
 }
 
 const isLoggedIn = computed(() => {
@@ -40,7 +47,6 @@ const isAdmin = computed(() => {
   return !!currentUser.value && currentUser.isAdmin
 })
 
-// TODO: 더미데이터를 실제 데이터로 바꾸기
 const login = async ({ userId: inputUserId, userPassword: inputUserPassword }) => {
   const {
     user_id: userId,

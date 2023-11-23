@@ -53,6 +53,8 @@ const handleSubmit = async (e) => {
     window.alert('새로운 계획을 만들었어요!')
     clear()
     await fetchPlanList()
+    const data = await AuthApi.sendMentionWhenCreatePlan()
+    console.log(data)
     router.push('/')
   } catch (e) {
     window.alert('다시 시도해주세요.')
