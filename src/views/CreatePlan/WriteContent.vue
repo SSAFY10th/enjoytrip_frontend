@@ -1,10 +1,12 @@
 <script setup>
 // TODO: 이 페이지는 URL을 통해 직접 접근할 수 없는 페이지이다. 반드시 SelectPlace 페이지에서 장소를 선택완료한 뒤 접근해야한다.
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useCreatePlan } from '../../hooks/useCreatePlan'
 import { router } from '../router'
+import * as AuthApi from '../../apis/auth'
+import { debounce } from '../../_lib/utils/debounce'
 
-const { selectedPlaceList } = useCreatePlan()
+const { selectedPlaceList, selectedStartDate, selectedEndDate, clear } = useCreatePlan()
 
 /*
 type FriendList = {
@@ -14,27 +16,24 @@ type FriendList = {
 */
 const selectedFriendList = ref([])
 const fetchedFriendList = ref([])
-
 const title = ref('')
 const content = ref('')
-
-const isShowFriendSearchModal = ref(false)
-const toggleFriendSearchModal = () => {
-  isShowFriendSearchModal.value = !isShowFriendSearchModal.value
-}
-
 const friendSearchInput = ref('')
-const handleSearchFriend = (e) => {
-  friendSearchInput.value = e.target.value
-  // 여기서 디바운스 Fetch
-  console.log(friendSearchInput.value)
-}
 
-const selectFriend = (friend) => {
+const toggleFriend = (friend) => {
+  const isExisting = selectedFriendList.value.find(
+    (selectedFriend) => selectedFriend.user_id === friend.user_id,
+  )
+  if (isExisting) {
+    selectedFriendList.value = selectedFriendList.value.filter(
+      (selectedFriend) => selectedFriend.user_id !== friend.user_id,
+    )
+    return
+  }
   selectedFriendList.value.push(friend)
 }
 
-const handleSubmit = (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault()
 
   if (!title.value || !content.value) {
@@ -42,7 +41,19 @@ const handleSubmit = (e) => {
     return
   }
 
-  console.log(title.value, content.value, selectedFriendList.value)
+  try {
+    await AuthApi.createPlan({
+      title: title.value,
+      planDate: `${selectedStartDate.value.toISOString()}~${selectedEndDate.value.toISOString()}`,
+      mentionedUserIdList: selectedFriendList.value.map((friend) => friend.user_id),
+      placeIdList: selectedPlaceList.value.map((place) => place.contentid),
+    })
+    window.alert('새로운 계획을 만들었어요!')
+    clear()
+    router.push('/')
+  } catch (e) {
+    window.alert('다시 시도해주세요.')
+  }
 }
 
 const navigateToPrev = () => {
@@ -50,8 +61,21 @@ const navigateToPrev = () => {
 }
 
 const navigateToHome = () => {
+  clear()
   router.replace('/')
 }
+
+watch(
+  friendSearchInput,
+  debounce(async () => {
+    if (!friendSearchInput.value) {
+      fetchedFriendList.value = []
+      return
+    }
+    const users = await AuthApi.searchUser(friendSearchInput.value)
+    fetchedFriendList.value = users
+  }, 100),
+)
 </script>
 
 <template>
@@ -73,25 +97,39 @@ const navigateToHome = () => {
       </div>
     </li>
   </ul>
-  <div @submit.prevent="handleSubmit" style="display: flex; flex-direction: column">
-    <input placeholder="제목" v-model="title" />
-    <input placeholder="내용" v-model="content" />
+  <div @submit.prevent="handleSubmit" style="display: flex; flex-direction: column; gap: 10px">
+    <input class="input" style="font-size: 24px" placeholder="제목" v-model="title" />
+    <input class="input" style="height: 300px" placeholder="내용" v-model="content" />
     <div>
       <label>멘션(함께할 친구)</label>
-      <ul>
-        <li v-for="friend in selectedFriendList" :key="friend.id">
-          {{ friend.name }}
+      <ul style="display: flex">
+        <li
+          v-for="friend in selectedFriendList"
+          :key="friend.user_id"
+          @click="toggleFriend(friend.user_id)"
+          style="background-color: red; padding: 5px; border-radius: 4px"
+        >
+          {{ friend.user_nickname }}
         </li>
       </ul>
-      <button class="button" @click="toggleFriendSearchModal">친구 찾기</button>
-      <ul v-show="isShowFriendSearchModal">
-        <input class="input" placeholder="친구를 찾아봐용" @input="handleSearchFriend" />
+      <ul style="display: flex; flex-direction: column; gap: 10px">
+        <input class="input" placeholder="친구를 찾아봐용" v-model="friendSearchInput" />
         <li
           v-for="fetchedFriend in fetchedFriendList"
-          :key="fetchedFriend.id"
-          @click="selectFriend(fetchedFriend)"
+          :key="fetchedFriend.user_id"
+          @click="toggleFriend(fetchedFriend)"
+          style="
+            display: flex;
+            align-items: center;
+            border: 1px solid green;
+            padding: 10px;
+            cursor: pointer;
+          "
         >
-          {{ fetchedFriend.name }}
+          <div style="font-size: 18px">{{ fetchedFriend.user_nickname }}</div>
+          <div style="font-size: 14px; color: gray">
+            {{ fetchedFriend.user_name }} ({{ fetchedFriend.user_id }})
+          </div>
         </li>
       </ul>
     </div>

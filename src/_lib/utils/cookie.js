@@ -34,3 +34,16 @@ export function deleteCookie(name) {
     'max-age': -1,
   })
 }
+
+export function forceClearAllCookies() {
+  // 현재 도메인에서 사용 가능한 모든 쿠키 가져오기
+  const cookies = document.cookie.split(';')
+
+  // 각 쿠키에 대해 만료 날짜를 현재 시간 이전으로 설정하여 삭제
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i]
+    const eqPos = cookie.indexOf('=')
+    const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie
+    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/'
+  }
+}

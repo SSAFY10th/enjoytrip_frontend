@@ -4,12 +4,13 @@ import Datepicker from '@vuepic/vue-datepicker'
 import { router } from '../router'
 import { useCreatePlan } from '../../hooks/useCreatePlan'
 
-const { selectedStartDate, selectedEndDate } = useCreatePlan()
+const { selectedStartDate, selectedEndDate, clear } = useCreatePlan()
+
+const navigateToHome = () => {
+  router.push('/')
+}
 
 const handleClickPlanCreateButton = () => {
-  // 시작, 종료 날짜를 선택하지 않았다면 이동불가
-  // 시작일이 종료일보다 빠르지 않다면 이동불가
-
   if (!selectedStartDate.value || !selectedEndDate.value) {
     window.alert('여행 기간을 선택해주세요')
     return
@@ -26,7 +27,7 @@ const handleClickPlanCreateButton = () => {
 
 <template>
   <main>
-    <RouterLink to="/">홈으로</RouterLink>
+    <button class="button" @click="navigateToHome">홈으로</button>
     <h1>새로운 여행을 추가해볼까요?</h1>
     <h2>여행 기간을 선택해주세요.</h2>
     <div style="display: flex; gap: 10px">

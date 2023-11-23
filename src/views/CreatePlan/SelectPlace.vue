@@ -11,7 +11,7 @@ import LocationSearchBar from '../../components/LocationSearchBar.vue'
 import { useCreatePlan } from '../../hooks/useCreatePlan'
 
 const { onMountedCallback } = useKakaoMap()
-const { selectedPlaceList, selectPlace, deletePlace } = useCreatePlan()
+const { selectedPlaceList, selectPlace, deletePlace, clearPlaceList } = useCreatePlan()
 
 const markerClickHandler = (marker) => {
   const { information } = marker
