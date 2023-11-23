@@ -10,6 +10,8 @@ const {
   VITE_SIGN_GET_PLANLIST,
   VITE_SIGN_DELETE_1_PLAN,
   VITE_SIGN_DELETE_2_PLAN,
+  VITE_SIGN_AUTHORIZE_EMAIL,
+  VITE_SIGN_AUTHORIZE_EMAIL_TOKEN_CHECK,
 } = import.meta.env
 
 export const join = async ({ userId, userPassword, userNickname, userName, userEmail }) => {
@@ -97,4 +99,18 @@ export const delete2Plan = async ({ planId, userPassword, token }) => {
     user_password: userPassword,
   })
   return res.data.data
+}
+
+export const authorizeEmail = async (email) => {
+  await mainRequest.post('/auth', {
+    sign: VITE_SIGN_AUTHORIZE_EMAIL,
+    user_email: email,
+  })
+}
+
+export const authorizeEmailTokenCheck = async (inputToken) => {
+  await mainRequest.post('/auth', {
+    sign: VITE_SIGN_AUTHORIZE_EMAIL_TOKEN_CHECK,
+    token: inputToken,
+  })
 }

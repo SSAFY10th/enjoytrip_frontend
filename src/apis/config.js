@@ -26,7 +26,7 @@ const mainRequestErrorHandler = (axiosError) => {
 }
 export const mainRequest = requestBuilder({
   baseURL: VITE_MAIN_API_END_POINT,
-  timeout: 3000,
+  timeout: 8000,
   withCredentials: true,
 })
 mainRequest.interceptors.response.use(mainRequestResponseHandler, mainRequestErrorHandler)
