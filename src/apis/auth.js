@@ -7,6 +7,7 @@ const {
   VITE_SIGN_AUTH_CHECK_ID,
   VITE_SIGN_SEARCH_USER,
   VITE_SIGN_CREATE_PLAN,
+  VITE_SIGN_GET_PLANLIST,
 } = import.meta.env
 
 export const join = async ({ userId, userPassword, userNickname, userName, userEmail }) => {
@@ -63,6 +64,15 @@ export const createPlan = async ({ title, planDate, placeIdList, mentionedUserId
     plan_date: planDate,
     content_ides: placeIdList,
     users: mentionedUserIdList,
+  })
+
+  return res.data.data
+}
+
+export const getPlanList = async (userId) => {
+  const res = await mainRequest.post('/plan', {
+    sign: VITE_SIGN_GET_PLANLIST,
+    user_id: userId,
   })
 
   return res.data.data

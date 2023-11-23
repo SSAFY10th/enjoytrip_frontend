@@ -6,7 +6,7 @@ import { tabs, useBottomSheet } from '../hooks/useBottomSheet'
 import { useAuth } from '../hooks/useAuth'
 
 const { selectedTab, handleClickTab } = useBottomSheet()
-const { isLoggedIn } = useAuth()
+const { isLoggedIn, planList } = useAuth()
 
 // TODO: auth guard 처리
 const navigateToLoginView = () => {
@@ -38,7 +38,13 @@ const navigateToRegisterView = () => {
           <RouterLink to="/plan/create/date" id="planCreateButton">
             + 새로운 여행계획 만들기
           </RouterLink>
-          <ul id="userPlanList"></ul>
+          <ul id="userPlanList">
+            <li v-for="planItem in planList" :key="planItem.plan_id">
+              <div>
+                {{ planItem.title }} | {{ planItem.plan_date }} | 조회수 : {{ planItem.hit }}
+              </div>
+            </li>
+          </ul>
         </div>
       </template>
     </div>

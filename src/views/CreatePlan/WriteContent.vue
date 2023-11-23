@@ -5,8 +5,10 @@ import { useCreatePlan } from '../../hooks/useCreatePlan'
 import { router } from '../router'
 import * as AuthApi from '../../apis/auth'
 import { debounce } from '../../_lib/utils/debounce'
+import { useAuth } from '../../hooks/useAuth'
 
 const { selectedPlaceList, selectedStartDate, selectedEndDate, clear } = useCreatePlan()
+const { fetchPlanList } = useAuth()
 
 /*
 type FriendList = {
@@ -50,6 +52,7 @@ const handleSubmit = async (e) => {
     })
     window.alert('새로운 계획을 만들었어요!')
     clear()
+    await fetchPlanList()
     router.push('/')
   } catch (e) {
     window.alert('다시 시도해주세요.')
