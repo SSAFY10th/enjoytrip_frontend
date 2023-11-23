@@ -8,6 +8,8 @@ const {
   VITE_SIGN_SEARCH_USER,
   VITE_SIGN_CREATE_PLAN,
   VITE_SIGN_GET_PLANLIST,
+  VITE_SIGN_DELETE_1_PLAN,
+  VITE_SIGN_DELETE_2_PLAN,
 } = import.meta.env
 
 export const join = async ({ userId, userPassword, userNickname, userName, userEmail }) => {
@@ -75,5 +77,24 @@ export const getPlanList = async (userId) => {
     user_id: userId,
   })
 
+  return res.data.data
+}
+
+export const delete1Plan = async ({ planId, userId }) => {
+  const res = await mainRequest.post('/plan', {
+    sign: VITE_SIGN_DELETE_1_PLAN,
+    plan_id: planId,
+    user_id: userId,
+  })
+  return res.data.data
+}
+
+export const delete2Plan = async ({ planId, userPassword, token }) => {
+  const res = await mainRequest.post('/plan', {
+    sign: VITE_SIGN_DELETE_2_PLAN,
+    plan_id: planId,
+    CSRF_token: token,
+    user_password: userPassword,
+  })
   return res.data.data
 }
