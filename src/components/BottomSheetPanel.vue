@@ -4,9 +4,48 @@ import LocationSelect from './LocationSelect.vue'
 import { router } from '../views/router'
 import { tabs, useBottomSheet } from '../hooks/useBottomSheet'
 import { useAuth } from '../hooks/useAuth'
+import * as AuthApi from '../apis/auth'
 
 const { selectedTab, handleClickTab } = useBottomSheet()
-const { isLoggedIn, planList } = useAuth()
+const { isLoggedIn, planList, currentUser, logout, fetchPlanList } = useAuth()
+
+const handleDeletePlanItem = async (planId) => {
+  let token = null
+  try {
+    token = await AuthApi.delete1Plan({
+      planId: Number(planId),
+      userId: currentUser.value.userId,
+    })
+  } catch (e) {
+    window.alert('세션이 만료되었어요. 다시 로그인해주세요.')
+    await logout()
+    window.location.href = '/'
+    return
+  }
+
+  if (token === null) {
+    window.alert('세션이 만료되었어요. 다시 로그인해주세요.')
+    await logout()
+    window.location.href = '/'
+    return
+  }
+
+  const password2 = window.prompt('정말 삭제할까요? 비밀번호를 다시 입력해주세요')
+  if (!password2) {
+    return
+  }
+
+  try {
+    await AuthApi.delete2Plan({
+      planId,
+      userPassword: password2,
+      token,
+    })
+    await fetchPlanList()
+  } catch (e) {
+    window.alert('비밀번호가 틀렸어요. 다시 시도해주세요.')
+  }
+}
 
 // TODO: auth guard 처리
 const navigateToLoginView = () => {
@@ -42,6 +81,7 @@ const navigateToRegisterView = () => {
             <li v-for="planItem in planList" :key="planItem.plan_id">
               <div>
                 {{ planItem.title }} | {{ planItem.plan_date }} | 조회수 : {{ planItem.hit }}
+                <button class="button" @click="handleDeletePlanItem(planItem.plan_id)">삭제</button>
               </div>
             </li>
           </ul>
