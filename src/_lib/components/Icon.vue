@@ -16,14 +16,18 @@ const GoogleIconMatcher = {
   arrowBack: 'arrow_back_ios',
   home: 'home',
   add: 'add',
+  notifications: 'notifications',
 }
 </script>
 
 <template>
   <div id="container">
-    <span id="icon" :style="{ fontSize: `${SizeMatcher[size]}px` }" class="material-icons">{{
-      GoogleIconMatcher[name]
-    }}</span>
+    <span
+      id="icon"
+      :style="{ fontSize: `${SizeMatcher[size]}px` }"
+      class="material-icons material-symbols-outlined"
+      >{{ GoogleIconMatcher[name] }}</span
+    >
   </div>
 </template>
 

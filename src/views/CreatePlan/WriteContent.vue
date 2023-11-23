@@ -10,12 +10,6 @@ import { useAuth } from '../../hooks/useAuth'
 const { selectedPlaceList, selectedStartDate, selectedEndDate, clear } = useCreatePlan()
 const { fetchPlanList } = useAuth()
 
-/*
-type FriendList = {
-  id: number ? string ?
-  name: string
-}
-*/
 const selectedFriendList = ref([])
 const fetchedFriendList = ref([])
 const title = ref('')
@@ -53,8 +47,6 @@ const handleSubmit = async (e) => {
     window.alert('새로운 계획을 만들었어요!')
     clear()
     await fetchPlanList()
-    const data = await AuthApi.sendMentionWhenCreatePlan()
-    console.log(data)
     router.push('/')
   } catch (e) {
     window.alert('다시 시도해주세요.')

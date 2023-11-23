@@ -5,6 +5,7 @@ import * as AuthApi from '../apis/auth'
 // TODO: 로그인 유무에 따른 네비게이션 가드
 const currentUser = ref(null)
 const planList = ref([])
+const notifications = ref([])
 
 const setCurrentUser = ({ userId, userNickname, userKey }) => {
   currentUser.value = {
@@ -19,9 +20,9 @@ const fetchPlanList = async () => {
   planList.value = fetchedPlanList
 }
 
-const fetchAlert = async () => {
-  const data = await AuthApi.sendMentionWhenCreatePlan()
-  console.log(data)
+const fetchNotifications = async () => {
+  const fetchedNotifications = await AuthApi.getNotifications()
+  notifications.value = fetchedNotifications
 }
 
 const onMountedCallback = async () => {
@@ -33,7 +34,7 @@ const onMountedCallback = async () => {
 
   try {
     await fetchPlanList()
-    await fetchAlert()
+    await fetchNotifications()
   } catch (e) {
     await logout()
   }
@@ -67,6 +68,7 @@ const login = async ({ userId: inputUserId, userPassword: inputUserPassword }) =
     userKey,
   })
   await fetchPlanList()
+  await fetchNotifications()
 }
 
 const logout = async () => {
@@ -90,6 +92,8 @@ export const useAuthProvider = [
     logout,
     onMountedCallback,
     fetchPlanList,
+    notifications,
+    fetchNotifications,
   },
 ]
 

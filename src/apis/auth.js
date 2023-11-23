@@ -12,7 +12,8 @@ const {
   VITE_SIGN_DELETE_2_PLAN,
   VITE_SIGN_AUTHORIZE_EMAIL,
   VITE_SIGN_AUTHORIZE_EMAIL_TOKEN_CHECK,
-  VITE_SIGN_SEND_MENTION_WHEN_CREATE_PLAN,
+  VITE_SIGN_GET_NOTIFICATIONS,
+  VITE_SIGN_CONFIRM_NOTIFICATION,
 } = import.meta.env
 
 export const join = async ({ userId, userPassword, userNickname, userName, userEmail }) => {
@@ -111,9 +112,16 @@ export const authorizeEmailTokenCheck = async (inputToken) => {
   })
 }
 
-export const sendMentionWhenCreatePlan = async () => {
+export const getNotifications = async () => {
   const res = await mainRequest.post('/plan', {
-    sign: VITE_SIGN_SEND_MENTION_WHEN_CREATE_PLAN,
+    sign: VITE_SIGN_GET_NOTIFICATIONS,
   })
   return res.data.data
+}
+
+export const confirmNotification = async (messageId) => {
+  await mainRequest.post('/plan', {
+    sign: VITE_SIGN_CONFIRM_NOTIFICATION,
+    message_id: messageId,
+  })
 }
