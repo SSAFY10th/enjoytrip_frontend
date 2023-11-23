@@ -7,6 +7,9 @@ import { router } from './router'
 import * as AuthApi from '../apis/auth'
 
 const isDuplicated = ref('idle') // idle, impossible, possible
+const isAuthorizedEmail = ref(false)
+
+const sendingEmailLoading = ref(false)
 
 const values = ref({
   userId: '',
@@ -37,6 +40,37 @@ const isError = {
   }),
 }
 
+const authorizeEmail = async () => {
+  if (!values.value.email || isError.email.value) {
+    return
+  }
+
+  try {
+    sendingEmailLoading.value = true
+    await AuthApi.authorizeEmail(values.value.email)
+    sendingEmailLoading.value = false
+  } catch (e) {
+    window.alert('다시 시도해주세요.')
+    return
+  }
+
+  const inputToken = window.prompt(
+    '이메일로 인증번호가 전송되었습니다. 이 창을 닫지말고 인증번호를 정확히 입력해주세요.',
+  )
+  if (!inputToken) {
+    window.alert('이메일 인증에 실패했어요.')
+    return
+  }
+
+  try {
+    await AuthApi.authorizeEmailTokenCheck(inputToken)
+    window.alert('이메일 인증에 성공했어요.')
+    isAuthorizedEmail.value = true
+  } catch (e) {
+    window.alert('이메일 인증에 실패했어요.')
+  }
+}
+
 const handleChangeUserId = (e) => {
   values.value.userId = e.target.value
   isTouched.value.userId = true
@@ -45,6 +79,7 @@ const handleChangeUserId = (e) => {
 const handleChangeEmail = (e) => {
   values.value.email = e.target.value
   isTouched.value.email = true
+  isAuthorizedEmail.value = false
 }
 const handleChangePassword = (e) => {
   values.value.password = e.target.value
@@ -85,6 +120,11 @@ const handleSubmit = async () => {
 
   if (isDuplicated.value === 'impossible') {
     window.alert('다른 아이디를 사용해주세요')
+    return
+  }
+
+  if (!isAuthorizedEmail.value) {
+    window.alert('이메일 인증을 해주세요.')
     return
   }
 
@@ -156,18 +196,33 @@ const navigateToBack = () => {
 
       <div class="input-group">
         <label for="email">이메일</label>
-        <input
-          class="input"
-          type="email"
-          id="email"
-          name="email"
-          required
-          v-model="values.email"
-          @change="handleChangeEmail"
-          placeholder="이메일을 입력해주세요"
-        />
-        <div v-show="isError.email.value" class="error">
+        <div style="display: flex">
+          <input
+            style="flex: 5"
+            class="input"
+            type="email"
+            id="email"
+            name="email"
+            required
+            v-model="values.email"
+            @change="handleChangeEmail"
+            placeholder="이메일을 입력해주세요"
+          />
+          <button
+            :disabled="sendingEmailLoading"
+            style="flex: 1; font-size: 14px"
+            class="button"
+            @click="authorizeEmail"
+          >
+            이메일 인증
+          </button>
+        </div>
+        <div v-if="isError.email.value" class="error">
           {{ RegisterValidation.invalidEmailMessage }}
+        </div>
+        <div v-else-if="sendingEmailLoading" style="font-weight: 800">잠시만 기다려주세요...</div>
+        <div v-else-if="isAuthorizedEmail" style="color: green; font-weight: 800">
+          이메일 인증 완료
         </div>
       </div>
 
