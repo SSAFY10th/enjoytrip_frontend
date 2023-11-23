@@ -3,7 +3,6 @@ import { ref, computed } from 'vue'
 
 import * as RegisterValidation from '../_lib/constants/registerPolicy'
 import Icon from '../_lib/components/Icon.vue'
-import { HttpError } from '../_lib/utils/HttpError'
 import { useAuth } from '../hooks/useAuth'
 import { router } from './router'
 import Layout from './Layout.vue'
@@ -36,12 +35,10 @@ const handleSubmit = async () => {
     })
     router.replace('/')
   } catch (e) {
-    console.log(e)
-    if (e instanceof HttpError) {
+    if (e.response.status < 500) {
       window.alert('아이디나 비밀번호를 다시 확인해주세요.')
       return
     }
-    window.alert('일시적으로 요청을 처리할 수 없어요.')
   }
 }
 

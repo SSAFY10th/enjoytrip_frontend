@@ -18,6 +18,10 @@ const deletePlace = (contentid) => {
   selectedPlaceList.value = selectedPlaceList.value.filter((place) => place.contentid !== contentid)
 }
 
+const clearPlaceList = () => {
+  selectedPlaceList.value = []
+}
+
 export const useCreatePlanProvider = [
   'useCreatePlan',
   {
@@ -27,6 +31,7 @@ export const useCreatePlanProvider = [
     clear,
     selectPlace,
     deletePlace,
+    clearPlaceList,
   },
 ]
 

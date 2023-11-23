@@ -4,6 +4,7 @@ import * as AuthApi from '../apis/auth'
 
 // TODO: 로그인 유무에 따른 네비게이션 가드
 const currentUser = ref(null)
+const planList = ref([])
 
 const setCurrentUser = ({ userId, userNickname, userKey }) => {
   currentUser.value = {
@@ -13,12 +14,22 @@ const setCurrentUser = ({ userId, userNickname, userKey }) => {
   }
 }
 
-const onMountedCallback = () => {
+const fetchPlanList = async () => {
+  try {
+    const fetchedPlanList = await AuthApi.getPlanList(currentUser.value.userId)
+    planList.value = fetchedPlanList
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+const onMountedCallback = async () => {
   const userCookie = getUserCookie()
   if (!userCookie) {
     return
   }
   setCurrentUser(userCookie)
+  await fetchPlanList()
 }
 
 const isLoggedIn = computed(() => {
@@ -49,10 +60,15 @@ const login = async ({ userId: inputUserId, userPassword: inputUserPassword }) =
     userNickname,
     userKey,
   })
+  await fetchPlanList()
 }
 
 const logout = async () => {
-  await AuthApi.logout()
+  try {
+    await AuthApi.logout()
+  } catch (e) {
+    console.log('logout error')
+  }
   currentUser.value = null
   deleteUserCookie()
 }
@@ -61,11 +77,13 @@ export const useAuthProvider = [
   'useAuth',
   {
     currentUser,
+    planList,
     isLoggedIn,
     isAdmin,
     login,
     logout,
     onMountedCallback,
+    fetchPlanList,
   },
 ]
 

@@ -2,6 +2,22 @@
 
 이 프로젝트는 여행 관련 정보를 시각적으로 제공하는 Vue.js 기반의 웹 애플리케이션입니다. 사용자는 지도를 통해 여행지를 찾아보고, 다양한 필터와 옵션을 사용하여 원하는 정보를 검색할 수 있습니다.
 
+### 루트 경로에 `.env` 파일을 생성하고 아래 환경변수를 입력해주세요.
+
+```
+VITE_OPEN_DATA_API_END_POINT=https://apis.data.go.kr/B551011/KorService1/
+VITE_OPEN_DATA_SERVICE_KEY=14DjtZu4DJ5vkaRktTKgCQhFeLW2wDK0UNf3ZZ7Y7z%2BUZWd457sU%2F09AEHtcJNvgtiwMRzI8sGC0Mu0MKG82%2Bg%3D%3D
+
+VITE_MAIN_API_END_POINT=http://localhost/api
+VITE_SIGN_AUTH_JOIN=join
+VITE_SIGN_AUTH_LOGIN=login
+VITE_SIGN_AUTH_LOGOUT=logout
+VITE_SIGN_AUTH_CHECK_ID=checkId
+VITE_SIGN_SEARCH_USER=searchUser
+VITE_SIGN_CREATE_PLAN=create
+VITE_SIGN_GET_PLANLIST=userList
+```
+
 ### 화면 구성
 
 ![메인화면.gif](public%2Freadme%2F%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.gif)

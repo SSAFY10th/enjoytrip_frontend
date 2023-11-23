@@ -1,22 +1,17 @@
-import { HttpError } from '../_lib/utils/HttpError'
-import { requestBuilder } from './config'
+import { mainRequest } from './config'
 
 const {
-  VITE_API_END_POINT,
   VITE_SIGN_AUTH_JOIN,
   VITE_SIGN_AUTH_LOGIN,
   VITE_SIGN_AUTH_LOGOUT,
   VITE_SIGN_AUTH_CHECK_ID,
+  VITE_SIGN_SEARCH_USER,
+  VITE_SIGN_CREATE_PLAN,
+  VITE_SIGN_GET_PLANLIST,
 } = import.meta.env
 
-const request = requestBuilder({
-  baseURL: VITE_API_END_POINT,
-  timeout: 3000,
-  withCredentials: true,
-})
-
 export const join = async ({ userId, userPassword, userNickname, userName, userEmail }) => {
-  const res = await request.post('/auth', {
+  const res = await mainRequest.post('/auth', {
     sign: VITE_SIGN_AUTH_JOIN,
     user_id: userId,
     user_password: userPassword,
@@ -24,40 +19,27 @@ export const join = async ({ userId, userPassword, userNickname, userName, userE
     user_name: userName,
     user_email: userEmail,
   })
-
-  if (res.status < 400) {
-    return res.data.data
-  }
-
-  throw new HttpError({ statusCode: res.status, message: 'join error' })
+  return res.data.data
 }
 
 export const login = async ({ userId, userPassword }) => {
-  try {
-    const res = await request.post('/auth', {
-      sign: VITE_SIGN_AUTH_LOGIN,
-      user_id: userId,
-      user_password: userPassword,
-    })
-    return res.data.data
-  } catch (e) {
-    throw new HttpError({ statusCode: res.status, message: 'login error' })
-  }
+  const res = await mainRequest.post('/auth', {
+    sign: VITE_SIGN_AUTH_LOGIN,
+    user_id: userId,
+    user_password: userPassword,
+  })
+  return res.data.data
 }
 
 export const logout = async () => {
-  try {
-    await request.post('/user', {
-      sign: VITE_SIGN_AUTH_LOGOUT,
-    })
-  } catch (e) {
-    throw new HttpError({ statusCode: res.status, message: 'logout error' })
-  }
+  await mainRequest.post('/user', {
+    sign: VITE_SIGN_AUTH_LOGOUT,
+  })
 }
 
 export const checkId = async (userId) => {
   try {
-    await request.post('/auth', {
+    await mainRequest.post('/auth', {
       sign: VITE_SIGN_AUTH_CHECK_ID,
       user_id: userId,
     })
@@ -65,4 +47,33 @@ export const checkId = async (userId) => {
   } catch (e) {
     return false
   }
+}
+
+export const searchUser = async (keyword) => {
+  const res = await mainRequest.post('/user', {
+    sign: VITE_SIGN_SEARCH_USER,
+    keyword,
+  })
+  return res.data.data
+}
+
+export const createPlan = async ({ title, planDate, placeIdList, mentionedUserIdList }) => {
+  const res = await mainRequest.post('/plan', {
+    sign: VITE_SIGN_CREATE_PLAN,
+    title,
+    plan_date: planDate,
+    content_ides: placeIdList,
+    users: mentionedUserIdList,
+  })
+
+  return res.data.data
+}
+
+export const getPlanList = async (userId) => {
+  const res = await mainRequest.post('/plan', {
+    sign: VITE_SIGN_GET_PLANLIST,
+    user_id: userId,
+  })
+
+  return res.data.data
 }
