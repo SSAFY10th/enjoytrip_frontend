@@ -21,8 +21,6 @@ const handleConfirmNotification = async (messageId) => {
 const navigateToLoginView = () => {
   router.push('/auth/login')
 }
-
-console.log(notifications.value)
 </script>
 
 <template>

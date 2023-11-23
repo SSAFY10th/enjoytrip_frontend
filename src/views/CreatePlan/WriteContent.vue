@@ -104,7 +104,13 @@ watch(
           v-for="friend in selectedFriendList"
           :key="friend.user_id"
           @click="toggleFriend(friend.user_id)"
-          style="background-color: red; padding: 5px; border-radius: 4px"
+          style="
+            background-color: var(--color-primary);
+            color: white;
+            padding: 5px;
+            font-weight: 800;
+            border-radius: 4px;
+          "
         >
           {{ friend.user_nickname }}
         </li>
